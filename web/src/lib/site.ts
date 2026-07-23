@@ -1,0 +1,72 @@
+export const site = {
+  name: "Servicelink Facilities Management",
+  tagline:
+    "Partner in facilities management — excellence in service to our communities with care and passion.",
+  description:
+    "Integrated facilities management for businesses across Sydney and NSW — cleaning, maintenance, grounds care, and more.",
+  url: "https://servicelink.net.au",
+  contact: {
+    phone: "1300 083 197",
+    serviceNumber: "1300083197",
+    serviceNumberDisplay: "1300 083 197",
+    email: "helpdesk@servicelink.net.au",
+    location: "Sydney, NSW",
+    officeLabel: "Support Office",
+  },
+  stats: [
+    { value: "1100", label: "Satisfied customers" },
+    { value: "20", label: "Different nationalities within our workforce" },
+    { value: "18", label: "Years of growth and successful business" },
+  ],
+  certifications: [
+    "ISO 9001:2015 Quality Management System",
+    "ISO 14001:2015 Environmental Management System",
+    "ISO 45001:2018 Occupational Health and Safety Management System",
+    "Southpac Certifications",
+    "Conserve Certificate No: BNG/CMS/24/01798",
+  ],
+  clients: [
+    "School Infrastructure NSW (SINSW)",
+    "Inner West Council",
+    "Bayside Council",
+    "Hunter's Hill Council",
+  ],
+} as const;
+
+export const navigation = [
+  { href: "/", label: "Home" },
+  { href: "/about", label: "About Us" },
+  { href: "/services", label: "Our Services" },
+  { href: "/what-we-do", label: "What We Do" },
+  { href: "/contact", label: "Contact" },
+] as const;
+
+export const clientsNavLabel = "Clients";
+
+export const heroSlides = [
+  {
+    title: "Sport Grounds Facilities Management",
+    subtitle: "Managed by Servicelink",
+    image: "/images/oval-1.jpg",
+  },
+  {
+    title: "Aquatic Centres Facilities Management",
+    subtitle: "Managed by Servicelink",
+    gradient: "from-teal-800 via-teal-700 to-emerald-600",
+  },
+  {
+    title: "Childcare Facilities Management",
+    subtitle: "Managed by Servicelink",
+    gradient: "from-slate-900 via-slate-800 to-teal-900",
+  },
+  {
+    title: "Landmark Buildings Facilities Management",
+    subtitle: "Managed by Servicelink",
+    gradient: "from-emerald-900 via-green-800 to-teal-800",
+  },
+  {
+    title: "Community Centres Facilities Management",
+    subtitle: "Managed by Servicelink",
+    gradient: "from-blue-950 via-slate-900 to-teal-900",
+  },
+] as const;

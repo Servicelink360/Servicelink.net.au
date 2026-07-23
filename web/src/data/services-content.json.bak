@@ -1,0 +1,198 @@
+[
+  {
+    "slug": "facilities-management",
+    "title": "Facilities Management",
+    "summary": "One accountable partner for your whole portfolio — integrated FM for businesses across Sydney and NSW.",
+    "description": "Modern facilities management is about more than keeping the lights on. It is one coordinated team across your assets — not a patchwork of contractors. We deliver integrated hard and soft services for offices, retail, industrial, healthcare, education, and multi-site portfolios, with clear reporting, WHS compliance, and outcomes you can measure.",
+    "highlights": [
+      {
+        "title": "Planned preventative maintenance programmes",
+        "detail": "We build maintenance schedules around your assets, occupancy patterns, and compliance requirements — reducing reactive call-outs, extending equipment life, and keeping critical systems running reliably across your portfolio."
+      },
+      {
+        "title": "Asset register and space optimisation",
+        "detail": "Accurate asset data supports smarter decisions. We help maintain registers, track condition and location, and identify opportunities to use space more efficiently across single sites and multi-location portfolios."
+      },
+      {
+        "title": "Cleaning and soft services coordination",
+        "detail": "Presentation, hygiene, and occupant experience are managed through one accountable team — aligned schedules, consistent standards, and clear escalation when standards or priorities change."
+      },
+      {
+        "title": "Grounds and landscaping oversight",
+        "detail": "Outdoor areas, car parks, and common spaces are coordinated alongside building services so your site stays safe, presentable, and compliant year-round without juggling multiple contractors."
+      },
+      {
+        "title": "Waste reduction and sustainability reporting",
+        "detail": "We support practical sustainability outcomes — waste stream management, recycling programmes, and reporting that helps you track progress against internal targets and client or tenancy requirements."
+      }
+    ]
+  },
+  {
+    "slug": "general-cleaning",
+    "title": "General Cleaning",
+    "summary": "Reliable, presentation-ready cleaning for workplaces and commercial sites across NSW.",
+    "description": "From corporate offices and retail stores to warehouses, childcare centres, and aged care facilities, we deliver cleaning that stands up to audit and daily use. Our teams work to documented standards, use safe products, and adapt schedules around your operations — so every space feels consistently cared for.",
+    "highlights": [
+      {
+        "title": "Office and commercial cleaning",
+        "detail": "Daily and periodic cleaning for workplaces — desks, meeting rooms, kitchens, washrooms, and high-touch surfaces — delivered to documented standards with quality checks and responsive make-safe support."
+      },
+      {
+        "title": "Retail and showroom presentation",
+        "detail": "Customer-facing spaces kept presentation-ready with flexible scheduling around trading hours, floor care, glass and fixture cleaning, and rapid response for spills or high-traffic periods."
+      },
+      {
+        "title": "Industrial and warehouse environments",
+        "detail": "Heavy-duty cleaning for operational sites including floor scrubbing, dust control, amenity areas, and loading zones — planned around shift patterns and safety requirements."
+      },
+      {
+        "title": "Childcare and aged care facilities",
+        "detail": "Hygiene-focused cleaning with attention to infection control, safe product use, and audit-ready documentation — supporting environments where health and compliance standards are non-negotiable."
+      },
+      {
+        "title": "Event and after-hours make-safe cleans",
+        "detail": "Ad-hoc and scheduled deep cleans before or after events, fit-outs, or incidents — restoring spaces quickly so your team can get back to business with minimal disruption."
+      }
+    ]
+  },
+  {
+    "slug": "ground-maintenance",
+    "title": "Ground Maintenance",
+    "summary": "Professional grounds care and landscaping for business sites across Sydney and NSW.",
+    "description": "First impressions start outdoors. We maintain lawns, gardens, car parks, and open spaces to a standard that keeps staff, customers, and visitors safe — and your business looking its best year-round. Seasonal works, reactive call-outs, and planned improvements are all handled by one reliable team.",
+    "highlights": [
+      {
+        "title": "Lawn mowing and edging",
+        "detail": "Regular mowing, edging, and clippings management for commercial lawns and open areas — keeping grass neat, safe underfoot, and consistent with your site presentation standards."
+      },
+      {
+        "title": "Garden bed and hedge maintenance",
+        "detail": "Weeding, pruning, mulching, and seasonal planting to maintain tidy, healthy garden beds and hedges that complement your building and reduce ongoing maintenance issues."
+      },
+      {
+        "title": "Landscape upgrades and planting",
+        "detail": "Planned improvements including new planting, bed redesign, and refresh works — coordinated with your budget cycle and designed to improve appearance and long-term maintainability."
+      },
+      {
+        "title": "Car park and common area upkeep",
+        "detail": "Sweeping, litter removal, line marking coordination, and general upkeep of car parks, pathways, and shared outdoor spaces used daily by staff and visitors."
+      },
+      {
+        "title": "Seasonal and storm-response works",
+        "detail": "Reactive call-outs after storms or extreme weather — branch and debris clearance, drainage checks, and make-safe works to restore safe access and presentation quickly."
+      }
+    ]
+  },
+  {
+    "slug": "tree-lopping-and-trees-assessments",
+    "title": "Tree Services and Management",
+    "summary": "Qualified arborists for safe tree care, reporting, and compliant works on commercial sites.",
+    "description": "Trees are assets and liabilities on any business property. We deliver pruning, removals, stump grinding, and arborist reporting with qualified crews — helping property owners and facility managers manage risk, meet compliance requirements, and protect the health of their landscape.",
+    "highlights": [
+      {
+        "title": "Pruning and selective removals",
+        "detail": "Qualified crews carry out pruning and removals to improve safety, clearances, and canopy health — with documented scope, safe work methods, and minimal disruption to surrounding areas."
+      },
+      {
+        "title": "Arborist reports and tree assessments",
+        "detail": "Formal assessments and reporting for development, insurance, or compliance purposes — identifying tree condition, risk factors, and recommended management actions."
+      },
+      {
+        "title": "Hazard and risk management",
+        "detail": "Proactive identification of deadwood, structural defects, and encroachment risks — with prioritised works to reduce liability before incidents occur."
+      },
+      {
+        "title": "Regulatory and compliance support",
+        "detail": "Guidance and documentation aligned with local tree protection and WHS requirements — helping you navigate approvals and demonstrate due diligence."
+      },
+      {
+        "title": "Ongoing canopy health monitoring",
+        "detail": "Periodic inspections and maintenance programmes for significant trees on your site — supporting long-term asset value and reducing emergency removal costs."
+      }
+    ]
+  },
+  {
+    "slug": "maintenance-services",
+    "title": "Maintenance Services",
+    "summary": "Responsive building maintenance with 24/7 coverage when your business cannot afford downtime.",
+    "description": "When something breaks, you need it fixed properly the first time. Our maintenance teams handle everything from reactive repairs to programmed works — plumbing, electrical, carpentry, painting, and HVAC — with qualified trades, documented job cards, and clear escalation for urgent issues.",
+    "highlights": [
+      {
+        "title": "24/7 emergency and make-safe response",
+        "detail": "Round-the-clock dispatch for urgent faults, water ingress, power issues, and make-safe situations — with clear escalation paths and documented response times so critical issues are handled fast."
+      },
+      {
+        "title": "Plumbing, electrical, and carpentry",
+        "detail": "Licensed and qualified trades for repairs, replacements, and minor works — from leaking fixtures and faulty circuits to doors, partitions, and general building fabric issues."
+      },
+      {
+        "title": "HVAC and essential services",
+        "detail": "Maintenance and reactive support for heating, cooling, ventilation, and essential building services — helping maintain comfort, air quality, and compliance with statutory requirements."
+      },
+      {
+        "title": "Programmed maintenance and repairs",
+        "detail": "Scheduled works aligned to your asset plan — reducing breakdowns through preventative tasks, inspection routines, and planned component replacement before failure."
+      },
+      {
+        "title": "Pest control coordination",
+        "detail": "Integrated coordination with licensed pest contractors — scheduling treatments, tracking activity, and closing out issues with documentation suitable for audits and tenancy requirements."
+      }
+    ]
+  },
+  {
+    "slug": "asset-management",
+    "title": "Asset Management",
+    "summary": "Structured asset registers, lifecycle planning, and compliance reporting for commercial portfolios.",
+    "description": "Effective asset management turns building data into better decisions. We maintain accurate asset registers, track condition and lifecycle costs, coordinate planned maintenance, and deliver reporting that supports capital planning, audit readiness, and portfolio performance across single sites and multi-location businesses.",
+    "highlights": [
+      {
+        "title": "Asset registers and condition assessments",
+        "detail": "Structured capture of asset location, age, condition, and criticality — giving FM and property teams a reliable baseline for maintenance planning and capital decisions."
+      },
+      {
+        "title": "Lifecycle and capital planning support",
+        "detail": "Forecasting replacement windows and lifecycle costs so budgets can be planned ahead — reducing surprise failures and supporting informed investment in plant and building systems."
+      },
+      {
+        "title": "Planned maintenance programme alignment",
+        "detail": "Linking asset data to maintenance schedules — ensuring PPM tasks target the right equipment at the right intervals with clear ownership and audit trails."
+      },
+      {
+        "title": "Compliance and audit-ready documentation",
+        "detail": "Records, inspection histories, and service documentation organised for internal review, external audit, or client reporting — reducing scramble before compliance deadlines."
+      },
+      {
+        "title": "Portfolio reporting for FM and property teams",
+        "detail": "Regular dashboards and summaries across sites — condition trends, open actions, spend visibility, and performance metrics that support portfolio-level decision making."
+      }
+    ]
+  },
+  {
+    "slug": "support-services",
+    "title": "Support Services",
+    "summary": "Practical back-office and project support that keeps FM programmes running smoothly.",
+    "description": "Strong facilities delivery needs more than trades on site. We help with procurement, project coordination, refurbishments, and client helpdesk support — giving businesses a single point of coordination when priorities shift, sites expand, and deadlines are tight.",
+    "highlights": [
+      {
+        "title": "Procurement and vendor coordination",
+        "detail": "Sourcing, onboarding, and managing subcontractors and suppliers — with clear scopes, performance tracking, and a single point of contact so delivery stays coordinated."
+      },
+      {
+        "title": "Project and refurbishment support",
+        "detail": "Hands-on coordination for fit-outs, refurbishments, and minor projects — scheduling trades, managing site access, and keeping stakeholders informed through to completion."
+      },
+      {
+        "title": "Client helpdesk and enquiries",
+        "detail": "A responsive point of contact for service requests, faults, and general FM enquiries — logged, prioritised, and tracked through to resolution with clear communication."
+      },
+      {
+        "title": "Compliance documentation assistance",
+        "detail": "Support preparing and maintaining WHS, insurance, and contractor compliance records — helping your programme stay audit-ready without adding burden to internal teams."
+      },
+      {
+        "title": "Tailored programmes for multi-site businesses",
+        "detail": "Flexible service models scaled across multiple locations — consistent standards, central reporting, and local delivery adapted to each site's needs and operating hours."
+      }
+    ]
+  }
+]

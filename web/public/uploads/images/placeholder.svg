@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="675" viewBox="0 0 1200 675" role="img" aria-label="Image placeholder">
+  <rect width="1200" height="675" fill="#e4e4e7"/>
+  <rect x="420" y="220" width="360" height="235" rx="16" fill="#d4d4d8"/>
+  <circle cx="500" cy="300" r="28" fill="#a1a1aa"/>
+  <path d="M420 420 L560 320 L680 390 L820 280 L780 455 L420 455 Z" fill="#a1a1aa"/>
+  <text x="600" y="520" text-anchor="middle" font-family="Arial, sans-serif" font-size="28" fill="#71717a">Upload image</text>
+</svg>

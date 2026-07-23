@@ -1,0 +1,49 @@
+{
+  "name": "web",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev --hostname 0.0.0.0",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "drizzle-kit migrate",
+    "db:push": "drizzle-kit push",
+    "db:studio": "drizzle-kit studio",
+    "db:seed": "node --env-file=.env scripts/seed.mjs",
+    "db:seed-site-pages": "node --env-file=.env scripts/seed-site-pages.mjs",
+    "db:seed-seo": "node --env-file=.env scripts/seed-seo.mjs",
+    "db:download-service-images": "node --env-file=.env scripts/download-service-images.mjs",
+    "db:download-homepage-images": "node --env-file=.env scripts/download-homepage-images.mjs",
+    "db:seed-locations": "node --env-file=.env scripts/seed-locations.mjs",
+    "db:generate-seo-pages": "node --env-file=.env scripts/generate-all-seo-pages.mjs",
+    "db:seed-gemini-services": "node --env-file=.env scripts/seed-gemini-services.mjs",
+    "db:seed-gemini-locations": "node --env-file=.env scripts/seed-gemini-location-pages.mjs",
+    "db:seed-gemini-content": "node --env-file=.env scripts/seed-gemini-content.mjs",
+    "db:check-gemini-progress": "node --env-file=.env scripts/check-gemini-progress.mjs",
+    "db:test": "node --env-file=.env scripts/test-db.mjs",
+    "db:connect": "node scripts/connect-db.mjs"
+  },
+  "dependencies": {
+    "bcryptjs": "^3.0.3",
+    "drizzle-orm": "^0.45.2",
+    "next": "16.2.9",
+    "postgres": "^3.4.9",
+    "react": "19.2.4",
+    "react-dom": "19.2.4",
+    "zod": "^4.4.3"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4",
+    "@types/bcryptjs": "^2.4.6",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "drizzle-kit": "^0.31.10",
+    "eslint": "^9",
+    "eslint-config-next": "16.2.9",
+    "tailwindcss": "^4",
+    "typescript": "^5"
+  }
+}

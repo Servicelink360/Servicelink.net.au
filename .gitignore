@@ -1,0 +1,23 @@
+# Local / Hostinger leftovers — do not push
+public_html/
+web - Copy/
+web-copy/
+service_link_admin-main*/
+*.sql
+.tmp/
+.DS_Store
+
+# Dependencies & builds (also ignored inside web/admin)
+**/node_modules/
+**/.next/
+**/out/
+**/build/
+**/.vercel/
+**/*.tsbuildinfo
+
+# Secrets & caches
+**/.env
+**/.env.*
+!**/.env.example
+**/scripts/.cache/
+**/*.pem
