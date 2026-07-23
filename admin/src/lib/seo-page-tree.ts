@@ -57,6 +57,8 @@ export function buildSeoPageTree(rows: SeoPageRow[]): StateNode[] {
         state: row.state,
         cities: [],
         pageCount: 0,
+        cityCount: 0,
+        metroCount: 0,
       };
       stateMap.set(row.state, stateNode);
     }
