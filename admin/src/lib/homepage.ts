@@ -16,7 +16,7 @@ export const defaultHomepageSettings: HomepageSettings = {
   heroAccentImage: "/uploads/images/site/hero-accent.jpg",
   heroKicker: "Your Partner in Facilities",
   heroTitleLine1: "Your buildings.",
-  heroTitleLine2: "Our obsession.",
+  heroTitleLine2: "Our responsibility.",
   heroSubtitle:
     "Servicelink delivers end-to-end facility operations for organisations that refuse to compromise — one partner, total accountability, measurable performance.",
   statNumber: "340+",

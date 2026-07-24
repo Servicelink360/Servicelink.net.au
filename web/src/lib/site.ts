@@ -14,9 +14,9 @@ export const site = {
     officeLabel: "Support Office",
   },
   stats: [
-    { value: "1100", label: "Satisfied customers" },
+    { value: "194+", label: "Active sites under management" },
     { value: "20", label: "Different nationalities within our workforce" },
-    { value: "18", label: "Years of growth and successful business" },
+    { value: "8+", label: "Years of growth and successful business" },
   ],
   certifications: [
     "ISO 9001:2015 Quality Management System",

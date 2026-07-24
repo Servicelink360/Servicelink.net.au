@@ -77,7 +77,7 @@ export default function AtlasHomePage() {
               </div>
               <div className="absolute -bottom-4 -left-4 hidden rounded-xl border border-[#e7e0d4] bg-[#fffdf9] px-4 py-3 shadow-lg md:block">
                 <p className="text-[10px] font-semibold uppercase tracking-wider text-[#b85c38]">
-                  Since 2006
+                  Since 2018
                 </p>
                 <p className="atlas-serif text-sm font-semibold text-[#1c1917]">
                   Sydney facilities partner

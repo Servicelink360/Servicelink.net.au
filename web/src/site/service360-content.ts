@@ -167,7 +167,7 @@ export const SERVICE360_ACCOUNTABILITY = [
   "Audits, inspections and action plans",
   "Photo and video evidence",
   "Training, induction and PPE records",
-  "Asset and compliance information",
+  "Asset management and compliance",
   "Invoices and shared documents",
   "Downloadable reports and operational history",
 ];

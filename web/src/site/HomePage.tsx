@@ -63,8 +63,15 @@ export default async function HomePage({ settings }: HomePageProps) {
   const clientFeedback = await getPublishedClientFeedback();
   const companyStats = COMPANY_STATS.map((stat) =>
     stat.label === "Sites under management" && opsStats.sitesCount > 0
-      ? { ...stat, value: sitesLabel }
+      ? {
+          ...stat,
+          value: sitesLabel,
+          detail: "Live from Service360",
+        }
       : stat,
+  ).filter(
+    (stat) =>
+      !(stat.label === "Sites under management" && opsStats.sitesCount <= 0),
   );
 
   return (
@@ -97,7 +104,7 @@ export default async function HomePage({ settings }: HomePageProps) {
             <dl className="m1-hero__mini">
               <div>
                 <dt>Founded</dt>
-                <dd>2008</dd>
+                <dd>2018</dd>
               </div>
               <div>
                 <dt>Headquarters</dt>

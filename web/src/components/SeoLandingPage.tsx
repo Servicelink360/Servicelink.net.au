@@ -7,6 +7,7 @@ import type { ResolvedLocationImages } from "@/lib/location-images";
 import type { SeoLinkedSections, SeoPageLink, SeoPageRecord } from "@/lib/seo-content";
 import { seoPageUrl } from "@/lib/seo-content";
 import { buildQuoteUrl, buildQuoteCtaHeading } from "@/lib/quote";
+import { splitBodyParagraphs } from "@/lib/split-body";
 import { SiteFooter } from "@/site/SiteFooter";
 import { SiteNav } from "@/site/SiteNav";
 
@@ -217,8 +218,8 @@ export function SeoLandingPage({ page, linked, images }: SeoLandingPageProps) {
           {isHubPage(page) ? (
             <div className="m1-service-overview__body">
               <p className="m1-label">Overview</p>
-              {page.body.split("\n\n").map((paragraph) => (
-                <p key={paragraph.slice(0, 40)}>{paragraph}</p>
+              {splitBodyParagraphs(page.body).map((paragraph) => (
+                <p key={paragraph.slice(0, 48)}>{paragraph}</p>
               ))}
             </div>
           ) : (
@@ -228,8 +229,8 @@ export function SeoLandingPage({ page, linked, images }: SeoLandingPageProps) {
                 <p className="m1-service-overview__quote">{page.intro}</p>
               </div>
               <div className="m1-service-overview__body">
-                {page.body.split("\n\n").map((paragraph) => (
-                  <p key={paragraph.slice(0, 40)}>{paragraph}</p>
+                {splitBodyParagraphs(page.body).map((paragraph) => (
+                  <p key={paragraph.slice(0, 48)}>{paragraph}</p>
                 ))}
               </div>
             </>

@@ -15,7 +15,7 @@ export const defaultService360Settings: Service360Settings = {
   heroTitleLine2: "every site.",
   heroSummary:
     "The technology powering every Servicelink service. One platform. Every site. Complete operational visibility.",
-  badgeNumber: "370+",
+  badgeNumber: "194+",
   badgeLabel: "Active sites",
 };
 

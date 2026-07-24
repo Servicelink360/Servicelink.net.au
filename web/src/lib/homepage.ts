@@ -18,10 +18,10 @@ export const defaultHomepageSettings: HomepageSettings = {
   heroAccentImage: `${SITE_IMAGE_ROOT}/hero-accent.jpg`,
   heroKicker: "Your Partner in Facilities",
   heroTitleLine1: "Your buildings.",
-  heroTitleLine2: "Our obsession.",
+  heroTitleLine2: "Our responsibility.",
   heroSubtitle:
     "Servicelink delivers end-to-end facility operations for organisations that refuse to compromise — one partner, total accountability, measurable performance.",
-  statNumber: "340+",
+  statNumber: "194+",
   statLabel: "Active sites managed across Australia",
 };
 

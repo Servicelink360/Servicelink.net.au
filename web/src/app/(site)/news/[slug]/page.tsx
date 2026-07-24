@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { JsonLd } from "@/components/JsonLd";
 import { createPageMetadata, getArticleJsonLd, getBreadcrumbJsonLd } from "@/lib/seo";
 import { getNewsPostBySlug, getPublishedNewsSlugs } from "@/lib/seo-content";
+import { splitBodyParagraphs } from "@/lib/split-body";
 import { SiteFooter } from "@/site/SiteFooter";
 import { SiteNav } from "@/site/SiteNav";
 
@@ -92,8 +93,8 @@ export default async function NewsArticlePage({ params }: NewsArticlePageProps) 
           <p className="m1-join__lead">{post.summary}</p>
 
           <div className="m1-service-overview__body">
-            {post.body.split("\n\n").map((paragraph) => (
-              <p key={paragraph.slice(0, 40)}>{paragraph}</p>
+            {splitBodyParagraphs(post.body).map((paragraph) => (
+              <p key={paragraph.slice(0, 48)}>{paragraph}</p>
             ))}
           </div>
 

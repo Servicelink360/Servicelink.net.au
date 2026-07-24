@@ -33,8 +33,8 @@ export const CERTIFICATIONS = [
 ];
 
 export const COMPANY_STATS = [
-  { value: "1,100+", label: "Sites under management", detail: "Across Sydney & NSW" },
-  { value: "18", label: "Years of operational excellence", detail: "Since 2006" },
+  { value: "—", label: "Sites under management", detail: "Live from Service360" },
+  { value: "8+", label: "Years of operational excellence", detail: "Since 2018" },
   { value: "99.2%", label: "SLA compliance rate", detail: "Rolling 12 months" },
   { value: "24/7", label: "Emergency response", detail: "365 days a year" },
 ];

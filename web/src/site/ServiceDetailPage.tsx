@@ -10,6 +10,7 @@ import {
   getServiceJsonLd,
 } from "@/lib/seo";
 import { getServiceDisplayImages } from "@/lib/service-display-images";
+import { splitBodyParagraphs } from "@/lib/split-body";
 import { getRelatedServices } from "./data";
 import { SiteFooter } from "./SiteFooter";
 import { SiteNav } from "./SiteNav";
@@ -120,7 +121,9 @@ export default async function ServicePage({ params }: ServicePageProps) {
             <p className="m1-service-overview__quote">{service.summary}</p>
           </div>
           <div className="m1-service-overview__body">
-            <p>{service.description}</p>
+            {splitBodyParagraphs(service.description).map((paragraph) => (
+              <p key={paragraph.slice(0, 48)}>{paragraph}</p>
+            ))}
           </div>
         </div>
       </section>

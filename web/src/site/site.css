@@ -1166,8 +1166,8 @@ html:has(.m1) {
 
 @media (min-width: 1024px) {
   .m1-service-overview {
-    grid-template-columns: 0.9fr 1.1fr;
-    gap: 4rem;
+    grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);
+    gap: 4.5rem;
     align-items: start;
   }
 }
@@ -1182,9 +1182,21 @@ html:has(.m1) {
 }
 
 .m1-service-overview__body {
-  font-size: 1rem;
-  line-height: 1.75;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  max-width: 38rem;
+  font-size: 1.0625rem;
+  line-height: 1.85;
   color: var(--m1-muted);
+}
+
+.m1-service-overview__body > .m1-label {
+  margin-bottom: 0.25rem;
+}
+
+.m1-service-overview__body > p {
+  margin: 0;
 }
 
 .m1-service-highlights {
@@ -2001,11 +2013,15 @@ html:has(.m1) {
 .m1-s360-support__body {
   margin-top: 1.25rem;
   display: grid;
-  gap: 0.875rem;
-  max-width: 48rem;
-  font-size: 0.9375rem;
-  line-height: 1.7;
+  gap: 1.25rem;
+  max-width: 40rem;
+  font-size: 1rem;
+  line-height: 1.8;
   color: var(--m1-muted);
+}
+
+.m1-s360-support__body > p {
+  margin: 0;
 }
 
 .m1-s360-support__caps {

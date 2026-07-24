@@ -17,7 +17,7 @@ export const defaultService360Settings = {
   heroTitleLine2: "every site.",
   heroSummary:
     "The technology powering every Servicelink service. One platform. Every site. Complete operational visibility.",
-  badgeNumber: "370+",
+  badgeNumber: "194+",
   badgeLabel: "Active sites",
 };
 
@@ -26,9 +26,9 @@ export const defaultHomepageSettings = {
   heroAccentImage: "/uploads/images/site/hero-accent.jpg",
   heroKicker: "Your Partner in Facilities",
   heroTitleLine1: "Your buildings.",
-  heroTitleLine2: "Our obsession.",
+  heroTitleLine2: "Our responsibility.",
   heroSubtitle:
     "Servicelink delivers end-to-end facility operations for organisations that refuse to compromise — one partner, total accountability, measurable performance.",
-  statNumber: "340+",
+  statNumber: "194+",
   statLabel: "Active sites managed across Australia",
 };
