@@ -15,6 +15,8 @@ export type MetroNode = {
   key: string;
   metroName: string;
   pages: SeoPageRow[];
+  pageCount: number;
+  publishedCount: number;
 };
 
 export type CityNode = {
@@ -23,6 +25,7 @@ export type CityNode = {
   cityName: string;
   metros: MetroNode[];
   pageCount: number;
+  publishedCount: number;
 };
 
 export type StateNode = {
@@ -30,6 +33,7 @@ export type StateNode = {
   state: string;
   cities: CityNode[];
   pageCount: number;
+  publishedCount: number;
   cityCount: number;
   metroCount: number;
 };
@@ -57,6 +61,7 @@ export function buildSeoPageTree(rows: SeoPageRow[]): StateNode[] {
         state: row.state,
         cities: [],
         pageCount: 0,
+        publishedCount: 0,
         cityCount: 0,
         metroCount: 0,
       };
@@ -64,6 +69,7 @@ export function buildSeoPageTree(rows: SeoPageRow[]): StateNode[] {
     }
 
     stateNode.pageCount += 1;
+    if (row.published) stateNode.publishedCount += 1;
 
     let cityNode = stateNode.cities.find((city) => city.cityName === row.cityName);
     if (!cityNode) {
@@ -73,11 +79,13 @@ export function buildSeoPageTree(rows: SeoPageRow[]): StateNode[] {
         cityName: row.cityName,
         metros: [],
         pageCount: 0,
+        publishedCount: 0,
       };
       stateNode.cities.push(cityNode);
     }
 
     cityNode.pageCount += 1;
+    if (row.published) cityNode.publishedCount += 1;
 
     const label = metroLabel(row.metroName);
     let metroNode = cityNode.metros.find((metro) => metro.metroName === label);
@@ -86,11 +94,15 @@ export function buildSeoPageTree(rows: SeoPageRow[]): StateNode[] {
         key: `metro:${row.state}:${row.cityName}:${label}`,
         metroName: label,
         pages: [],
+        pageCount: 0,
+        publishedCount: 0,
       };
       cityNode.metros.push(metroNode);
     }
 
     metroNode.pages.push(row);
+    metroNode.pageCount += 1;
+    if (row.published) metroNode.publishedCount += 1;
   }
 
   const sortMetros = (a: MetroNode, b: MetroNode) => {

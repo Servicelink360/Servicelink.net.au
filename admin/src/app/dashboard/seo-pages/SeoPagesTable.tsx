@@ -15,6 +15,36 @@ type SeoPagesTableProps = {
 type CityNode = ReturnType<typeof buildSeoPageTree>[number]["cities"][number];
 type MetroNode = CityNode["metros"][number];
 
+function PublishStatus({
+  publishedCount,
+  pageCount,
+}: {
+  publishedCount: number;
+  pageCount: number;
+}) {
+  if (pageCount <= 0) return null;
+
+  const allLive = publishedCount === pageCount;
+  const noneLive = publishedCount === 0;
+  const label = allLive
+    ? "Published"
+    : noneLive
+      ? "Unpublished"
+      : `${publishedCount}/${pageCount} live`;
+  const className = allLive
+    ? "admin-tree-pub admin-tree-pub--live"
+    : noneLive
+      ? "admin-tree-pub admin-tree-pub--off"
+      : "admin-tree-pub admin-tree-pub--partial";
+
+  return (
+    <span className={className} title={`${publishedCount} of ${pageCount} pages published`}>
+      <span className="admin-tree-pub__dot" aria-hidden="true" />
+      {label}
+    </span>
+  );
+}
+
 function ToggleButton({
   expanded,
   onClick,
@@ -168,6 +198,7 @@ function StateBlock({
               <span className="admin-tree-nav-count">{state.metroCount}</span>
             </button>
             <span className="admin-tree-stats">
+              <span>{state.publishedCount} live</span>
               <span>{state.pageCount} pages</span>
             </span>
           </div>
@@ -198,7 +229,8 @@ function StateBlock({
               toggle={toggle}
               deleteSeoPage={deleteSeoPage}
               depth={1}
-              subtitle={metro.isCityLevel ? `${metro.cityName} · city pages` : metro.cityName}
+              cityName={metro.cityName}
+              subtitle={metro.isCityLevel ? undefined : metro.cityName}
             />
           ))
         : null}
@@ -229,6 +261,7 @@ function CityBlock({
               onClick={() => toggle(city.key)}
               label={`${cityOpen ? "Collapse" : "Expand"} ${city.cityName}`}
             />
+            <PublishStatus publishedCount={city.publishedCount} pageCount={city.pageCount} />
             <strong className="admin-tree-name">{city.cityName}</strong>
             <span className="admin-tree-stats">
               <span>{city.pageCount} pages</span>
@@ -255,6 +288,7 @@ function CityBlock({
                 toggle={toggle}
                 deleteSeoPage={deleteSeoPage}
                 depth={2}
+                cityName={city.cityName}
               />
             );
           })
@@ -270,6 +304,7 @@ function MetroBlock({
   toggle,
   deleteSeoPage,
   depth,
+  cityName,
   subtitle,
 }: {
   metro: MetroNode;
@@ -278,10 +313,13 @@ function MetroBlock({
   toggle: (key: string) => void;
   deleteSeoPage: (id: string) => Promise<void>;
   depth: number;
+  cityName: string;
   subtitle?: string;
 }) {
   const pageDepth = depth + 1;
   const rowClass = isCityLevel ? "admin-tree-row--city-pages" : "admin-tree-row--metro";
+  const name = isCityLevel ? cityName : metro.metroName;
+  const detail = isCityLevel ? "City-wide · hub + services" : subtitle;
 
   return (
     <>
@@ -291,10 +329,11 @@ function MetroBlock({
             <ToggleButton
               expanded={metroOpen}
               onClick={() => toggle(metro.key)}
-              label={`${metroOpen ? "Collapse" : "Expand"} ${metro.metroName}`}
+              label={`${metroOpen ? "Collapse" : "Expand"} ${name}`}
             />
-            <strong className="admin-tree-name">{isCityLevel ? "City pages" : metro.metroName}</strong>
-            {subtitle ? <span className="admin-tree-subtitle">{subtitle}</span> : null}
+            <PublishStatus publishedCount={metro.publishedCount} pageCount={metro.pageCount} />
+            <strong className="admin-tree-name">{name}</strong>
+            {detail ? <span className="admin-tree-subtitle">{detail}</span> : null}
             <span className="admin-tree-count">{metro.pages.length} pages</span>
           </div>
         </td>

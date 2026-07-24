@@ -80,9 +80,9 @@ export default async function SeoPagesDashboard({ searchParams }: SeoPagesDashbo
     params.nav === "metros" || params.nav === "cities" ? params.nav : "states";
 
   const filters: SQL[] = [];
-  if (navLevel === "cities") {
-    filters.push(isNull(seoPages.metroId));
-  } else if (navLevel === "metros") {
+  // "Cities" nav keeps full city → metro hierarchy (includes metro pages).
+  // "Metros" nav is a flat metro-only list.
+  if (navLevel === "metros") {
     filters.push(isNotNull(seoPages.metroId));
   }
   if (stateFilter) filters.push(eq(cityLoc.state, stateFilter));
@@ -218,7 +218,7 @@ export default async function SeoPagesDashboard({ searchParams }: SeoPagesDashbo
 
   const navLabel =
     navLevel === "cities"
-      ? "City-level pages"
+      ? "Browse by city (includes metros)"
       : navLevel === "metros"
         ? "Metro-level pages"
         : "All pages by state";

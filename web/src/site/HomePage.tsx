@@ -16,13 +16,15 @@ import { getPublishedClientFeedback } from "@/lib/client-feedback-settings";
 import { ClientFeedbackCarousel } from "./ClientFeedbackCarousel";
 
 const TICKER = [
-  "Hard Services",
-  "Soft Services",
+  "Facilities Management",
   "Asset Management",
-  "Compliance",
-  "Sustainability",
-  "Emergency Response",
-  "Project Delivery",
+  "Cleaning",
+  "Grounds",
+  "Tree Services",
+  "Maintenance",
+  "Roof & Solar",
+  "24/7 Response",
+  "Service360",
 ];
 
 const CAPABILITIES = [
@@ -248,9 +250,9 @@ export default async function HomePage({ settings }: HomePageProps) {
 
       {/* ── Services marquee ── */}
       <div className="sl-page m1-marquee">
-        <section className="sl-marquee-band" aria-label="Trusted by leading organisations">
+        <section className="sl-marquee-band" aria-label="End-to-end facilities capability">
           <div className="sl-container">
-            <p className="sl-marquee-band__label">Trusted by leading organisations</p>
+            <p className="sl-marquee-band__label">End-to-end facilities capability</p>
           </div>
           <div className="sl-marquee">
             <div className="sl-marquee__track">
