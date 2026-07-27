@@ -87,27 +87,6 @@ export default async function ContactPage({ searchParams }: ContactPageProps) {
         </div>
       </section>
 
-      <section className="m1-section m1-section--stone">
-        <div className="m1-wrap m1-contact-details">
-          <p className="m1-label">Support office</p>
-          <h2 className="m1-h2">How to reach us</h2>
-          <div className="m1-contact-details__grid">
-            <div>
-              <span className="m1-contact-details__label">Phone</span>
-              <a href={`tel:${phoneHref}`}>{site.contact.phone}</a>
-            </div>
-            <div>
-              <span className="m1-contact-details__label">Email</span>
-              <span>{site.contact.email}</span>
-            </div>
-            <div>
-              <span className="m1-contact-details__label">{site.contact.officeLabel}</span>
-              <span>{site.contact.location}</span>
-            </div>
-          </div>
-        </div>
-      </section>
-
       <div className="sl-page m1-bottom">
         <SiteFooter />
       </div>
