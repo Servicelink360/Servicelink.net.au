@@ -20,7 +20,6 @@ const NAV: NavItem[] = [
   { href: "/service360", label: "Service360", page: true },
   { href: "/news", label: "News", page: true },
   { href: "/join", label: "Join", page: true },
-  { href: "/contact", label: "Contact Us", page: true },
 ];
 
 export function SiteNav() {
@@ -86,7 +85,7 @@ export function SiteNav() {
               {site.contact.serviceNumberDisplay}
             </a>
             <Link href="/contact" className="m1-btn m1-btn--ink m1-nav__cta" onClick={close}>
-              Book a briefing
+              Contact Us
             </Link>
             <button
               type="button"
@@ -120,7 +119,7 @@ export function SiteNav() {
             {site.contact.serviceNumberDisplay}
           </a>
           <Link href="/contact" className="m1-btn m1-btn--ink" onClick={close}>
-            Book a briefing
+            Contact Us
           </Link>
         </nav>
       </div>

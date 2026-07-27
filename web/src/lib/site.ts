@@ -6,9 +6,9 @@ export const site = {
     "Integrated facilities management for businesses across Sydney and NSW — cleaning, maintenance, grounds care, and more.",
   url: "https://servicelink.net.au",
   contact: {
-    phone: "1300 083 197",
-    serviceNumber: "1300083197",
-    serviceNumberDisplay: "1300 083 197",
+    phone: "0420 220 220",
+    serviceNumber: "0420220220",
+    serviceNumberDisplay: "0420 220 220",
     email: "helpdesk@servicelink.net.au",
     location: "Sydney, NSW",
     officeLabel: "Support Office",
@@ -38,7 +38,6 @@ export const navigation = [
   { href: "/about", label: "About Us" },
   { href: "/services", label: "Our Services" },
   { href: "/what-we-do", label: "What We Do" },
-  { href: "/contact", label: "Contact" },
 ] as const;
 
 export const clientsNavLabel = "Clients";
