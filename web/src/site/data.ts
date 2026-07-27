@@ -6,11 +6,11 @@ import {
 } from "@/lib/service-image-paths";
 
 const SERVICE_SLUGS = [
-  "asset-management",
   "facilities-management",
   "general-cleaning",
   "ground-maintenance",
   "tree-lopping-and-trees-assessments",
+  "asset-management",
   "maintenance-services",
   "roof-gutter-solar-cleaning",
   "support-services",

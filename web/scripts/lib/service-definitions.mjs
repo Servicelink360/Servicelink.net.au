@@ -5,13 +5,6 @@
  */
 export const SERVICE_DEFINITIONS = [
   {
-    seoSlug: "asset-management",
-    staticSlug: "asset-management",
-    name: "Asset Management",
-    focus:
-      "Asset registers, condition assessments, lifecycle planning, and compliance reporting for commercial portfolios.",
-  },
-  {
     seoSlug: "facilities-management",
     staticSlug: "facilities-management",
     name: "Facilities Management",
@@ -38,6 +31,13 @@ export const SERVICE_DEFINITIONS = [
     name: "Tree Services and Management",
     focus:
       "Qualified arborists for pruning, removals, hazard management, and arborist reporting on commercial properties.",
+  },
+  {
+    seoSlug: "asset-management",
+    staticSlug: "asset-management",
+    name: "Asset Management",
+    focus:
+      "Asset registers, condition assessments, lifecycle planning, and compliance reporting for commercial portfolios.",
   },
   {
     seoSlug: "maintenance",

@@ -6,6 +6,7 @@ import {
   requireDatabase,
   validationErrorResponse,
 } from "@/lib/api";
+import { notifyContactSubmission } from "@/lib/email";
 import { contactSchema } from "@/lib/validations";
 import { site } from "@/lib/site";
 
@@ -48,6 +49,19 @@ export async function POST(request: Request) {
     name,
     email,
     destination: site.contact.email,
+  });
+
+  await notifyContactSubmission({
+    kind: "contact",
+    name,
+    email,
+    phone,
+    company,
+    message: fullMessage,
+    extra: {
+      Portfolio: portfolioSize,
+      Source: source ?? "website",
+    },
   });
 
   return NextResponse.json({

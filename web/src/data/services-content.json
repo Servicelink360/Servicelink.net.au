@@ -1,33 +1,5 @@
 [
   {
-    "slug": "asset-management",
-    "title": "Asset Management",
-    "summary": "Comprehensive asset management services including registers, condition assessments, lifecycle planning, and compliance reporting for commercial portfolios.",
-    "description": "Servicelink offers comprehensive asset management services designed to optimise the performance, value, and longevity of your commercial property portfolio. We provide a strategic approach to managing your physical assets, ensuring they contribute effectively to your business objectives while controlling costs and mitigating risks.\n\nOur services begin with the development of detailed asset registers, providing a clear inventory of all critical equipment and infrastructure. We then conduct thorough condition assessments to evaluate the current state of assets, identifying maintenance needs and potential points of failure. This information forms the basis for robust lifecycle planning, allowing for informed decisions on maintenance, repair, and replacement schedules.\n\nThrough proactive asset management, Servicelink helps businesses reduce operational expenditure, improve capital planning, and ensure ongoing compliance with regulatory requirements. We provide detailed reporting on asset performance, maintenance history, and future investment needs, empowering you with the data required for strategic decision-making across your entire portfolio.",
-    "highlights": [
-      {
-        "title": "Comprehensive Asset Registers",
-        "detail": "We create and maintain detailed asset registers that catalogue all critical equipment and infrastructure within your commercial portfolio. This provides a clear, centralised record of assets, aiding in tracking, planning, and compliance across multiple sites."
-      },
-      {
-        "title": "Condition Assessment & Reporting",
-        "detail": "Our experts conduct thorough condition assessments to evaluate the current state and performance of your assets. We provide detailed reports outlining maintenance requirements, potential risks, and recommendations for optimal asset health and longevity."
-      },
-      {
-        "title": "Lifecycle Planning & Optimisation",
-        "detail": "Servicelink develops strategic lifecycle plans for your assets, forecasting maintenance, repair, and replacement needs over their lifespan. This proactive approach optimises asset utilisation, minimises unexpected costs, and maximises return on investment."
-      },
-      {
-        "title": "Compliance & Risk Management",
-        "detail": "We ensure all asset management practices comply with relevant Australian standards, safety regulations, and industry guidelines. Our processes help identify and mitigate risks associated with asset failure, ensuring operational safety and regulatory adherence."
-      },
-      {
-        "title": "Strategic Capital Planning",
-        "detail": "Our asset management insights support informed capital expenditure planning. By understanding asset condition and lifecycle, we help you prioritise investments, budget effectively for future replacements, and make strategic decisions that enhance your portfolio's long-term value."
-      }
-    ]
-  },
-  {
     "slug": "facilities-management",
     "title": "Facilities Management",
     "summary": "Servicelink offers integrated hard and soft facilities management for diverse commercial and multi-site portfolios across Australia. We streamline operations, enhance asset value, and ensure compliance.",
@@ -140,6 +112,34 @@
       {
         "title": "Emergency Tree Response",
         "detail": "We offer rapid response for emergency tree situations, such as storm-damaged or fallen trees that pose an immediate threat. Our teams are equipped to safely remove hazards and make your site secure, minimising disruption and further damage."
+      }
+    ]
+  },
+  {
+    "slug": "asset-management",
+    "title": "Asset Management",
+    "summary": "Comprehensive asset management services including registers, condition assessments, lifecycle planning, and compliance reporting for commercial portfolios.",
+    "description": "Servicelink offers comprehensive asset management services designed to optimise the performance, value, and longevity of your commercial property portfolio. We provide a strategic approach to managing your physical assets, ensuring they contribute effectively to your business objectives while controlling costs and mitigating risks.\n\nOur services begin with the development of detailed asset registers, providing a clear inventory of all critical equipment and infrastructure. We then conduct thorough condition assessments to evaluate the current state of assets, identifying maintenance needs and potential points of failure. This information forms the basis for robust lifecycle planning, allowing for informed decisions on maintenance, repair, and replacement schedules.\n\nThrough proactive asset management, Servicelink helps businesses reduce operational expenditure, improve capital planning, and ensure ongoing compliance with regulatory requirements. We provide detailed reporting on asset performance, maintenance history, and future investment needs, empowering you with the data required for strategic decision-making across your entire portfolio.",
+    "highlights": [
+      {
+        "title": "Comprehensive Asset Registers",
+        "detail": "We create and maintain detailed asset registers that catalogue all critical equipment and infrastructure within your commercial portfolio. This provides a clear, centralised record of assets, aiding in tracking, planning, and compliance across multiple sites."
+      },
+      {
+        "title": "Condition Assessment & Reporting",
+        "detail": "Our experts conduct thorough condition assessments to evaluate the current state and performance of your assets. We provide detailed reports outlining maintenance requirements, potential risks, and recommendations for optimal asset health and longevity."
+      },
+      {
+        "title": "Lifecycle Planning & Optimisation",
+        "detail": "Servicelink develops strategic lifecycle plans for your assets, forecasting maintenance, repair, and replacement needs over their lifespan. This proactive approach optimises asset utilisation, minimises unexpected costs, and maximises return on investment."
+      },
+      {
+        "title": "Compliance & Risk Management",
+        "detail": "We ensure all asset management practices comply with relevant Australian standards, safety regulations, and industry guidelines. Our processes help identify and mitigate risks associated with asset failure, ensuring operational safety and regulatory adherence."
+      },
+      {
+        "title": "Strategic Capital Planning",
+        "detail": "Our asset management insights support informed capital expenditure planning. By understanding asset condition and lifecycle, we help you prioritise investments, budget effectively for future replacements, and make strategic decisions that enhance your portfolio's long-term value."
       }
     ]
   },

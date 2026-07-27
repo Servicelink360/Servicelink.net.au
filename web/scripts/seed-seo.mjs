@@ -135,16 +135,6 @@ await sql`
 
 const seoServiceSeed = [
   {
-    slug: "asset-management",
-    name: "Asset Management",
-    summary:
-      "Structured asset registers, lifecycle planning, and compliance reporting for commercial portfolios.",
-    description:
-      "Effective asset management turns building data into better decisions. We maintain accurate asset registers, track condition and lifecycle costs, coordinate planned maintenance, and deliver reporting that supports capital planning, audit readiness, and portfolio performance across single sites and multi-location businesses.",
-    linkedServiceSlug: "asset-management",
-    sortOrder: 1,
-  },
-  {
     slug: "facilities-management",
     name: "Facilities Management",
     summary:
@@ -152,7 +142,7 @@ const seoServiceSeed = [
     description:
       "Modern facilities management is about more than keeping the lights on. It is one coordinated team across your assets — not a patchwork of contractors. We deliver integrated hard and soft services for offices, retail, industrial, healthcare, education, and multi-site portfolios, with clear reporting, WHS compliance, and outcomes you can measure.",
     linkedServiceSlug: "facilities-management",
-    sortOrder: 2,
+    sortOrder: 1,
   },
   {
     slug: "cleaning",
@@ -162,7 +152,7 @@ const seoServiceSeed = [
     description:
       "From corporate offices and retail stores to warehouses, childcare centres, and aged care facilities, we deliver cleaning that stands up to audit and daily use. Our teams work to documented standards, use safe products, and adapt schedules around your operations — so every space feels consistently cared for.",
     linkedServiceSlug: "general-cleaning",
-    sortOrder: 3,
+    sortOrder: 2,
   },
   {
     slug: "ground-maintenance",
@@ -172,7 +162,7 @@ const seoServiceSeed = [
     description:
       "First impressions start outdoors. We maintain lawns, gardens, car parks, and open spaces to a standard that keeps staff, customers, and visitors safe — and your business looking its best year-round. Seasonal works, reactive call-outs, and planned improvements are all handled by one reliable team.",
     linkedServiceSlug: "ground-maintenance",
-    sortOrder: 4,
+    sortOrder: 3,
   },
   {
     slug: "tree-services",
@@ -182,6 +172,16 @@ const seoServiceSeed = [
     description:
       "Trees are assets and liabilities on any business property. We deliver pruning, removals, stump grinding, and arborist reporting with qualified crews — helping property owners and facility managers manage risk, meet compliance requirements, and protect the health of their landscape.",
     linkedServiceSlug: "tree-lopping-and-trees-assessments",
+    sortOrder: 4,
+  },
+  {
+    slug: "asset-management",
+    name: "Asset Management",
+    summary:
+      "Structured asset registers, lifecycle planning, and compliance reporting for commercial portfolios.",
+    description:
+      "Effective asset management turns building data into better decisions. We maintain accurate asset registers, track condition and lifecycle costs, coordinate planned maintenance, and deliver reporting that supports capital planning, audit readiness, and portfolio performance across single sites and multi-location businesses.",
+    linkedServiceSlug: "asset-management",
     sortOrder: 5,
   },
   {

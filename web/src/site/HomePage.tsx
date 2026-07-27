@@ -17,10 +17,10 @@ import { ClientFeedbackCarousel } from "./ClientFeedbackCarousel";
 
 const TICKER = [
   "Facilities Management",
-  "Asset Management",
   "Cleaning",
   "Grounds",
   "Tree Services",
+  "Asset Management",
   "Maintenance",
   "Roof & Solar",
   "24/7 Response",
