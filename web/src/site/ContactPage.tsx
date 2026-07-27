@@ -97,10 +97,8 @@ export default async function ContactPage({ searchParams }: ContactPageProps) {
               <a href={`tel:${phoneHref}`}>{site.contact.phone}</a>
             </div>
             <div>
-              <span className="m1-contact-details__label">Contact</span>
-              <a href="#contact-form" className="m1-btn m1-btn--ink">
-                Contact
-              </a>
+              <span className="m1-contact-details__label">Email</span>
+              <span>{site.contact.email}</span>
             </div>
             <div>
               <span className="m1-contact-details__label">{site.contact.officeLabel}</span>
