@@ -160,6 +160,7 @@ export function SiteQuoteForm({
             <option value="6-20 sites">6–20 sites</option>
             <option value="21-50 sites">21–50 sites</option>
             <option value="50+ sites">50+ sites</option>
+            <option value="Other">Other</option>
           </select>
         </label>
         <label className="m1-contact-form__field">
