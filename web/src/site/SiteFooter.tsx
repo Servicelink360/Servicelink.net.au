@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { Logo } from "@/components/Logo";
 import { getPublishedServices } from "@/lib/services";
 import { CERTIFICATIONS } from "./data";
 import { NewsletterSignup } from "./NewsletterSignup";
@@ -11,7 +10,6 @@ export async function SiteFooter() {
     <footer className="sl-footer">
       <div className="sl-container sl-footer__grid">
         <div className="sl-footer__brand">
-          <Logo className="m1-footer-logo" variant="light" />
           <p className="sl-footer__name">Servicelink</p>
           <p className="sl-footer__tagline">
             Integrated facilities management for organisations that demand more.
