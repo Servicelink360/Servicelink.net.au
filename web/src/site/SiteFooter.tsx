@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { legalLinks } from "@/lib/legal";
 import { getPublishedServices } from "@/lib/services";
 import { CERTIFICATIONS } from "./data";
 import { NewsletterSignup } from "./NewsletterSignup";
@@ -52,8 +53,11 @@ export async function SiteFooter() {
       <div className="sl-container sl-footer__bottom">
         <p>© {new Date().getFullYear()} Servicelink. All rights reserved.</p>
         <div className="sl-footer__links">
-          <Link href="/legal/privacy-policy">Privacy</Link>
-          <Link href="/legal/terms-and-conditions">Terms</Link>
+          {legalLinks.map((link) => (
+            <Link key={link.href} href={link.href}>
+              {link.label}
+            </Link>
+          ))}
         </div>
       </div>
     </footer>

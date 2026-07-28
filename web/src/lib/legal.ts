@@ -48,6 +48,12 @@ export const legalPages: LegalPage[] = [
         ],
       },
       {
+        title: "Cookies and similar technologies",
+        paragraphs: [
+          "Our website may use cookies and similar technologies to help the site function, understand usage, and improve your experience. For more detail, see our Cookie Policy.",
+        ],
+      },
+      {
         title: "Security and retention",
         paragraphs: [
           "We implement reasonable technical and organisational measures to protect personal information from misuse, loss, unauthorised access, modification, or disclosure.",
@@ -107,7 +113,8 @@ export const legalPages: LegalPage[] = [
         title: "Intellectual property",
         paragraphs: [
           "Unless otherwise stated, all content on this website — including text, graphics, logos, and layout — is owned by or licensed to ServiceLink Pty Ltd and is protected by Australian intellectual property laws.",
-          "You may not reproduce, distribute, or modify website content without our prior written consent.",
+          "Images and media on this website may be owned by us, licensed from third parties, or used under applicable licence terms. You may not reproduce, distribute, or modify website content without our prior written consent.",
+          "Website images are generally for display and illustration only and should not be treated as a depiction of a specific contracted site or outcome unless we say so.",
         ],
       },
       {
@@ -147,6 +154,14 @@ export const legalPages: LegalPage[] = [
         ],
       },
       {
+        title: "Images and visual content",
+        paragraphs: [
+          "Photographs, illustrations, icons, and other visual content on this website are provided for general display and illustrative purposes only.",
+          "Images may depict representative facilities, environments, or activities and do not necessarily show a specific Servicelink client site, current project, or guaranteed service outcome unless expressly stated.",
+          "Any resemblance to particular properties or people is coincidental unless we identify them as such. Visuals may be stock imagery, commissioned photography, or edited for presentation.",
+        ],
+      },
+      {
         title: "Third-party references",
         paragraphs: [
           "References to clients, certifications, standards, or industry bodies are provided for informational purposes. Inclusion on this website does not constitute endorsement by those organisations unless expressly stated.",
@@ -166,12 +181,69 @@ export const legalPages: LegalPage[] = [
       },
     ],
   },
+  {
+    slug: "cookie-policy",
+    title: "Cookie Policy",
+    description:
+      "How Servicelink uses cookies and similar technologies on this website.",
+    lastUpdated: "28 July 2026",
+    sections: [
+      {
+        title: "What are cookies?",
+        paragraphs: [
+          "Cookies are small text files placed on your device when you visit a website. They are widely used to make websites work, remember preferences, and help site owners understand how pages are used.",
+          "Similar technologies may include local storage, pixels, and server logs that collect technical information about your browser or device.",
+        ],
+      },
+      {
+        title: "How we use cookies",
+        paragraphs: [
+          "We may use cookies and similar technologies for essential site functions, performance measurement, and (where used) limited marketing measurement, as described below.",
+        ],
+      },
+      {
+        title: "Essential / functional",
+        paragraphs: [
+          "These help the website operate securely and correctly — for example, page navigation, form submission, load balancing, and remembering basic session state where required.",
+        ],
+      },
+      {
+        title: "Analytics and performance",
+        paragraphs: [
+          "We may use analytics tools to understand how visitors use our site (such as pages viewed, approximate location at a city or region level, device type, and referral source). This helps us improve content and performance.",
+          "Where analytics providers process data on our behalf, they do so under appropriate arrangements and applicable privacy laws.",
+        ],
+      },
+      {
+        title: "Marketing and preferences",
+        paragraphs: [
+          "If we use marketing or preference cookies in future (for example to measure campaign performance), we will update this policy. We do not use cookies to sell your personal information.",
+        ],
+      },
+      {
+        title: "Managing cookies",
+        paragraphs: [
+          "Most browsers let you block or delete cookies through their settings. If you disable cookies, some parts of the website may not work as intended.",
+          "You can also use browser privacy controls and, where available, opt-out tools provided by analytics or advertising networks.",
+        ],
+      },
+      {
+        title: "More information",
+        paragraphs: [
+          "Personal information collected via cookies or similar technologies is handled in line with our Privacy Policy.",
+          "For questions about this Cookie Policy, contact helpdesk@servicelink.net.au or call 0420 220 220.",
+        ],
+      },
+    ],
+  },
 ];
 
-export const legalLinks = legalPages.map((page) => ({
-  href: `/legal/${page.slug}`,
-  label: page.title,
-}));
+export const legalLinks = [
+  { href: "/legal/privacy-policy", label: "Privacy" },
+  { href: "/legal/cookie-policy", label: "Cookies" },
+  { href: "/legal/terms-and-conditions", label: "Terms" },
+  { href: "/legal/disclaimer", label: "Disclaimer" },
+];
 
 export function getLegalPage(slug: string): LegalPage | undefined {
   return legalPages.find((page) => page.slug === slug);
