@@ -151,7 +151,11 @@ export async function saveNewsPost(formData: FormData) {
 
   const id = String(formData.get("id") ?? "");
   const title = String(formData.get("title") ?? "").trim();
-  const slug = String(formData.get("slug") ?? "").trim();
+  const slug = String(formData.get("slug") ?? "")
+    .trim()
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-|-$/g, "");
   const summary = String(formData.get("summary") ?? "").trim();
   const body = String(formData.get("body") ?? "").trim();
   const metaTitle = String(formData.get("metaTitle") ?? "").trim();
@@ -166,6 +170,20 @@ export async function saveNewsPost(formData: FormData) {
     throw new Error("All fields are required.");
   }
 
+  let publishedAt: Date | null = null;
+  if (published) {
+    if (id) {
+      const [existing] = await db
+        .select({ publishedAt: newsPosts.publishedAt, published: newsPosts.published })
+        .from(newsPosts)
+        .where(eq(newsPosts.id, id))
+        .limit(1);
+      publishedAt = existing?.published && existing.publishedAt ? existing.publishedAt : new Date();
+    } else {
+      publishedAt = new Date();
+    }
+  }
+
   const values = {
     title,
     slug,
@@ -175,7 +193,7 @@ export async function saveNewsPost(formData: FormData) {
     metaDescription: metaDescription || null,
     featuredImage,
     published,
-    publishedAt: published ? new Date() : null,
+    publishedAt,
     updatedAt: new Date(),
   };
   if (id) {
@@ -185,6 +203,8 @@ export async function saveNewsPost(formData: FormData) {
   }
 
   revalidatePath("/dashboard/news");
+  revalidatePath("/news");
+  revalidatePath(`/news/${slug}`);
   redirect("/dashboard/news");
 }
 
