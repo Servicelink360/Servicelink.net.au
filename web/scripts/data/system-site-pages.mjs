@@ -5,6 +5,7 @@ export const SYSTEM_SITE_PAGES = [
   { slug: "service360", title: "Service360", pageType: "service360", publicPath: "/service360" },
   { slug: "about", title: "About Us", pageType: "template", publicPath: "/about" },
   { slug: "services", title: "Services", pageType: "template", publicPath: "/services" },
+  { slug: "news", title: "News", pageType: "news", publicPath: "/news" },
   { slug: "contact", title: "Contact", pageType: "template", publicPath: "/contact" },
   { slug: "quote", title: "Request a Quote", pageType: "template", publicPath: "/quote" },
   { slug: "join", title: "Join", pageType: "template", publicPath: "/join" },
@@ -19,6 +20,19 @@ export const defaultService360Settings = {
     "The technology powering every Servicelink service. One platform. Every site. Complete operational visibility.",
   badgeNumber: "194+",
   badgeLabel: "Active sites",
+};
+
+export const defaultNewsSettings = {
+  heroImage: "/uploads/images/services/support-services/hero.jpg",
+  heroKicker: "News & updates",
+  heroTitleLine1: "The latest from",
+  heroTitleLine2: "Servicelink.",
+  heroSummary:
+    "The latest from Servicelink on facilities management, service delivery, and operational excellence across Sydney and NSW.",
+  heroImageAlt:
+    "Servicelink team delivering facilities management services across NSW",
+  emptyBadgeNumber: "18",
+  emptyBadgeLabel: "Years of service",
 };
 
 export const defaultHomepageSettings = {

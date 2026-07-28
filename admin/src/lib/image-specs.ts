@@ -13,6 +13,8 @@ export const IMAGE_SPECS = {
     "1920 × 1440 px (4:3). Used for city or metro hub heroes. JPG, PNG or WebP.",
   newsFeatured:
     "1920 × 1080 px (16:9). Used as the news article header image. JPG, PNG or WebP.",
+  newsPageHero:
+    "1920 × 1440 px (4:3). Used as the News landing page hero. JPG, PNG or WebP.",
   seoPageHero:
     "1920 × 1440 px (4:3). Optional override for a single SEO location page. JPG, PNG or WebP.",
 } as const;

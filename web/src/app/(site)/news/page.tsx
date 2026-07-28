@@ -3,7 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { desc, eq } from "drizzle-orm";
 import { createPageMetadata } from "@/lib/seo";
-import { getServiceImage } from "@/site/data";
+import { getNewsPageSettings } from "@/lib/news-page-settings";
 import { SiteNav } from "@/site/SiteNav";
 import { SiteFooter } from "@/site/SiteFooter";
 import { getDb, isDatabaseConfigured } from "@/lib/db";
@@ -16,7 +16,9 @@ export const metadata: Metadata = createPageMetadata({
   description: "Latest news and updates from Servicelink facilities management.",
   path: "/news",
 });
+
 export default async function NewsPage() {
+  const settings = await getNewsPageSettings();
   const posts = isDatabaseConfigured()
     ? await getDb()
         .select({
@@ -43,16 +45,13 @@ export default async function NewsPage() {
               <span>News</span>
             </nav>
 
-            <p className="m1-label">News &amp; updates</p>
+            <p className="m1-label">{settings.heroKicker}</p>
             <h1 className="m1-h1 m1-service-hero__title">
-              The latest from
+              {settings.heroTitleLine1}
               <br />
-              <em>Servicelink.</em>
+              <em>{settings.heroTitleLine2}</em>
             </h1>
-            <p className="m1-service-hero__summary">
-              The latest from Servicelink on facilities management, service
-              delivery, and operational excellence across Sydney and NSW.
-            </p>
+            <p className="m1-service-hero__summary">{settings.heroSummary}</p>
 
             <div className="m1-service-hero__actions">
               <Link href="/join" className="m1-btn m1-btn--ink m1-btn--lg">
@@ -67,8 +66,8 @@ export default async function NewsPage() {
           <div className="m1-service-hero__visual">
             <div className="m1-service-hero__frame">
               <Image
-                src={getServiceImage("support-services")}
-                alt="Servicelink team delivering facilities management services across NSW"
+                src={settings.heroImage}
+                alt={settings.heroImageAlt}
                 fill
                 className="object-cover"
                 sizes="(max-width: 1024px) 100vw, 50vw"
@@ -77,10 +76,10 @@ export default async function NewsPage() {
             </div>
             <div className="m1-service-hero__badge">
               <span className="m1-service-hero__badge-n">
-                {posts.length > 0 ? posts.length : "18"}
+                {posts.length > 0 ? posts.length : settings.emptyBadgeNumber}
               </span>
               <span className="m1-service-hero__badge-l">
-                {posts.length > 0 ? "Published articles" : "Years of service"}
+                {posts.length > 0 ? "Published articles" : settings.emptyBadgeLabel}
               </span>
             </div>
           </div>

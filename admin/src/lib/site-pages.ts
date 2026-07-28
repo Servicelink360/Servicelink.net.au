@@ -1,17 +1,19 @@
 export const HOME_PAGE_SLUG = "home";
 export const SERVICE360_PAGE_SLUG = "service360";
+export const NEWS_PAGE_SLUG = "news";
 
 export const SYSTEM_SITE_PAGES = [
   { slug: "home", title: "Homepage", pageType: "homepage", publicPath: "/" },
   { slug: "service360", title: "Service360", pageType: "service360", publicPath: "/service360" },
   { slug: "about", title: "About Us", pageType: "template", publicPath: "/about" },
   { slug: "services", title: "Services", pageType: "template", publicPath: "/services" },
+  { slug: "news", title: "News", pageType: "news", publicPath: "/news" },
   { slug: "contact", title: "Contact", pageType: "template", publicPath: "/contact" },
   { slug: "quote", title: "Request a Quote", pageType: "template", publicPath: "/quote" },
   { slug: "join", title: "Join", pageType: "template", publicPath: "/join" },
 ] as const;
 
-export type SitePageType = "standard" | "homepage" | "template" | "service360";
+export type SitePageType = "standard" | "homepage" | "template" | "service360" | "news";
 
 export function isSystemSitePageSlug(slug: string) {
   return SYSTEM_SITE_PAGES.some((page) => page.slug === slug);
@@ -27,6 +29,8 @@ export function formatSitePageType(pageType: string) {
       return "Homepage";
     case "service360":
       return "Service360 page";
+    case "news":
+      return "News page";
     case "template":
       return "Site template";
     default:

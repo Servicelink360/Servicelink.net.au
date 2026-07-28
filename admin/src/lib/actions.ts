@@ -39,9 +39,14 @@ import {
 } from "@/lib/service360";
 import {
   HOME_PAGE_SLUG,
+  NEWS_PAGE_SLUG,
   SERVICE360_PAGE_SLUG,
   isSystemSitePageSlug,
 } from "@/lib/site-pages";
+import {
+  parseNewsSettings,
+  type NewsPageSettings,
+} from "@/lib/news-page";
 
 function optionalInternalHero(value: string | null | undefined, label: string) {
   const trimmed = String(value ?? "").trim();
@@ -890,6 +895,62 @@ export async function saveService360Page(formData: FormData) {
     .where(eq(sitePages.id, id));
 
   revalidatePath("/dashboard/pages");
+  redirect(`/dashboard/pages/${id}`);
+}
+
+export async function saveNewsPage(formData: FormData) {
+  await requireAdminSession();
+  const db = getDb();
+
+  const id = String(formData.get("id") ?? "").trim();
+  if (!id) throw new Error("Page id is required.");
+
+  const [page] = await db.select().from(sitePages).where(eq(sitePages.id, id)).limit(1);
+  if (!page || page.pageType !== "news" || page.slug !== NEWS_PAGE_SLUG) {
+    throw new Error("News page record not found.");
+  }
+
+  const heroImage =
+    optionalInternalHero(String(formData.get("heroImage") ?? ""), "Hero image") ??
+    parseNewsSettings(null).heroImage;
+
+  const settings: NewsPageSettings = {
+    heroImage,
+    heroKicker: String(formData.get("heroKicker") ?? "").trim(),
+    heroTitleLine1: String(formData.get("heroTitleLine1") ?? "").trim(),
+    heroTitleLine2: String(formData.get("heroTitleLine2") ?? "").trim(),
+    heroSummary: String(formData.get("heroSummary") ?? "").trim(),
+    heroImageAlt: String(formData.get("heroImageAlt") ?? "").trim(),
+    emptyBadgeNumber: String(formData.get("emptyBadgeNumber") ?? "").trim(),
+    emptyBadgeLabel: String(formData.get("emptyBadgeLabel") ?? "").trim(),
+  };
+
+  if (
+    !settings.heroKicker ||
+    !settings.heroTitleLine1 ||
+    !settings.heroTitleLine2 ||
+    !settings.heroSummary ||
+    !settings.heroImageAlt ||
+    !settings.emptyBadgeNumber ||
+    !settings.emptyBadgeLabel
+  ) {
+    throw new Error("All News page text fields are required.");
+  }
+
+  const published = formData.get("published") === "on";
+
+  await db
+    .update(sitePages)
+    .set({
+      title: "News",
+      settings: JSON.stringify(settings),
+      published,
+      updatedAt: new Date(),
+    })
+    .where(eq(sitePages.id, id));
+
+  revalidatePath("/dashboard/pages");
+  revalidatePath("/news");
   redirect(`/dashboard/pages/${id}`);
 }
 
