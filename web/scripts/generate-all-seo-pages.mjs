@@ -146,8 +146,8 @@ for (const city of cities) {
         ${content.h1},
         ${content.intro},
         ${content.body},
-        true,
         false,
+        true,
         now()
       )
       ON CONFLICT (path) DO UPDATE SET
@@ -175,7 +175,6 @@ for (const city of cities) {
           WHEN seo_pages.content_source = 'gemini' THEN seo_pages.body
           ELSE EXCLUDED.body
         END,
-        published = true,
         updated_at = now()
       RETURNING (xmax = 0) AS inserted
     `;
@@ -193,7 +192,10 @@ const [{ count }] = await sql`SELECT COUNT(*)::int AS count FROM seo_pages WHERE
 console.log(`SEO pages generated for ${cities.length} cities.`);
 console.log(`  New pages:     ${created}`);
 console.log(`  Updated pages: ${skipped}`);
-console.log(`  Total live:    ${count}`);
+console.log(`  Currently published: ${count}`);
+console.log("");
+console.log("Note: new/updated pages keep unpublished by default.");
+console.log("Run: npm run db:publish-seo-phase1  (or later phases) to publish.");
 console.log("");
 console.log("Examples:");
 console.log("  /locations/sydney");
