@@ -12,12 +12,16 @@ export default async function MessagesPage() {
   return (
     <>
       <h1 style={{ marginTop: 0 }}>Contact messages</h1>
+      <p style={{ marginTop: 0, color: "#64748b" }}>
+        Enquiries submitted from the website contact form. Name, email, phone,
+        organisation, portfolio size and message are stored here.
+      </p>
       <div className="admin-panel">
         <table className="admin-table">
           <thead>
             <tr>
               <th>From</th>
-              <th>Details</th>
+              <th>Contact details</th>
               <th>Message</th>
               <th>Received</th>
               <th />
@@ -34,12 +38,22 @@ export default async function MessagesPage() {
                   <td>
                     <strong>{row.name}</strong>
                     <br />
-                    {row.email}
+                    <a href={`mailto:${row.email}`}>{row.email}</a>
                   </td>
                   <td>
-                    {row.company ? <div>Org: {row.company}</div> : null}
-                    {row.phone ? <div>Phone: {row.phone}</div> : null}
-                    {row.portfolioSize ? <div>Portfolio: {row.portfolioSize}</div> : null}
+                    {row.phone ? (
+                      <div>
+                        Phone: <a href={`tel:${row.phone.replace(/\s/g, "")}`}>{row.phone}</a>
+                      </div>
+                    ) : (
+                      <div>Phone: —</div>
+                    )}
+                    {row.company ? <div>Org: {row.company}</div> : <div>Org: —</div>}
+                    {row.portfolioSize ? (
+                      <div>Portfolio: {row.portfolioSize}</div>
+                    ) : (
+                      <div>Portfolio: —</div>
+                    )}
                     <div>Source: {row.source}</div>
                   </td>
                   <td style={{ maxWidth: "360px", whiteSpace: "pre-wrap" }}>{row.message}</td>

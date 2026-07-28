@@ -35,6 +35,7 @@ export function SiteContactForm({
         body: JSON.stringify({
           name: String(formData.get("name") ?? ""),
           email: String(formData.get("email") ?? ""),
+          phone: String(formData.get("phone") ?? ""),
           company: String(formData.get("company") ?? ""),
           portfolioSize: String(formData.get("size") ?? ""),
           message: String(formData.get("message") ?? ""),
@@ -99,6 +100,18 @@ export function SiteContactForm({
             autoComplete="email"
           />
         </label>
+        <label className={isHero ? "m1-contact-form__field" : "sl-field"}>
+          <span>Phone</span>
+          <input
+            required
+            type="tel"
+            name="phone"
+            placeholder="04xx xxx xxx"
+            autoComplete="tel"
+          />
+        </label>
+      </div>
+      <div className={isHero ? "m1-contact-form__row" : "sl-form__row"}>
         <label className={isHero ? "m1-contact-form__field" : "sl-field"}>
           <span>Portfolio size</span>
           <select name="size" defaultValue="">
