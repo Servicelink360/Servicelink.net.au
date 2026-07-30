@@ -22,6 +22,7 @@
     "db:seed-gemini-locations": "node --env-file=.env scripts/seed-gemini-location-pages.mjs",
     "db:seed-gemini-content": "node --env-file=.env scripts/seed-gemini-content.mjs",
     "db:publish-seo-phase1": "node --env-file=.env scripts/publish-seo-phase1.mjs",
+    "db:fix-seo-meta": "node --env-file=.env scripts/fix-seo-meta.mjs",
     "db:check-gemini-progress": "node --env-file=.env scripts/check-gemini-progress.mjs",
     "db:test": "node --env-file=.env scripts/test-db.mjs",
     "db:connect": "node scripts/connect-db.mjs"

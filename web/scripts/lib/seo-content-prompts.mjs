@@ -86,5 +86,6 @@ Rules:
 - metroServices must include one entry for every metro slug listed above (same slugs, same count).
 - Use plain text in body fields; separate paragraphs with \\n\\n.
 - Do not invent street addresses, phone numbers, or client names.
-- metaTitle and metaDescription must fit typical SEO length limits.`;
+- metaTitle and metaDescription must fit typical SEO length limits.
+- Do not append "| Servicelink" (or the brand name) to metaTitle — branding is added by the site.`;
 }

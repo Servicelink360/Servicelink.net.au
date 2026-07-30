@@ -22,6 +22,29 @@ export function absoluteUrl(path: string): string {
   return new URL(path, site.url).toString();
 }
 
+/** Build a single brand-safe document title (no double "| Servicelink"). */
+export function formatPageTitle(title: string): string {
+  const cleaned = title
+    .replace(/(\s*\|\s*Servicelink)+$/gi, "")
+    .replace(/\s+/g, " ")
+    .trim();
+
+  if (!cleaned) return seo.defaultTitle;
+  if (/servicelink/i.test(cleaned)) return cleaned;
+  return `${cleaned} | Servicelink`;
+}
+
+/** Keep meta descriptions within a typical SERP-friendly length. */
+export function clampMetaDescription(description: string, max = 155): string {
+  const text = description.replace(/\s+/g, " ").trim();
+  if (text.length <= max) return text;
+
+  const sliced = text.slice(0, max - 1);
+  const lastSpace = sliced.lastIndexOf(" ");
+  const base = lastSpace > Math.floor(max * 0.6) ? sliced.slice(0, lastSpace) : sliced;
+  return `${base.replace(/[.,;:\s]+$/g, "")}…`;
+}
+
 export function createPageMetadata({
   title,
   description,
@@ -30,11 +53,13 @@ export function createPageMetadata({
   openGraphType = "website",
 }: CreatePageMetadataOptions): Metadata {
   const canonical = absoluteUrl(path);
-  const pageTitle = title.includes("Servicelink") ? title : `${title} | Servicelink`;
+  const pageTitle = formatPageTitle(title);
+  const pageDescription = clampMetaDescription(description);
 
   return {
-    title,
-    description,
+    // Absolute bypasses root titleTemplate so brand is never appended twice.
+    title: { absolute: pageTitle },
+    description: pageDescription,
     alternates: { canonical },
     robots: noIndex
       ? { index: false, follow: false }
@@ -55,12 +80,12 @@ export function createPageMetadata({
       url: canonical,
       siteName: seo.siteName,
       title: pageTitle,
-      description,
+      description: pageDescription,
     },
     twitter: {
       card: "summary_large_image",
       title: pageTitle,
-      description,
+      description: pageDescription,
     },
   };
 }

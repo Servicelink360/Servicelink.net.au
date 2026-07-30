@@ -36,6 +36,15 @@ export function inferSeoPageType(
   return "city_hub";
 }
 
+function clamp(text: string, max: number) {
+  const value = text.replace(/\s+/g, " ").trim();
+  if (value.length <= max) return value;
+  const sliced = value.slice(0, max - 1);
+  const lastSpace = sliced.lastIndexOf(" ");
+  const base = lastSpace > Math.floor(max * 0.6) ? sliced.slice(0, lastSpace) : sliced;
+  return `${base.replace(/[.,;:\s]+$/g, "")}…`;
+}
+
 export function buildSeoPageContent(
   pageType: SeoPageType,
   city: LocationRef,
@@ -44,8 +53,12 @@ export function buildSeoPageContent(
 ) {
   if (pageType === "city_hub") {
     return {
-      metaTitle: `Facilities Services in ${city.name}, ${city.state} | Servicelink`,
-      metaDescription: `Servicelink delivers facilities management, cleaning, ground maintenance, tree services, building maintenance, and support services for businesses across ${city.name}, ${city.state} and surrounding metro areas.`,
+      // Brand is added by createPageMetadata — do not include "| Servicelink" here.
+      metaTitle: `Facilities Services in ${city.name}, ${city.state}`,
+      metaDescription: clamp(
+        `Facilities management, cleaning, maintenance, and support services for businesses across ${city.name}, ${city.state} and nearby metro areas.`,
+        155,
+      ),
       h1: `Facilities services in ${city.name}`,
       intro: `Servicelink delivers integrated facilities management, cleaning, maintenance, and specialist support for businesses across ${city.name} and nearby metro areas.`,
       body: `From commercial offices and retail sites to community facilities and multi-site portfolios, our team delivers consistent standards, clear reporting, and responsive support across ${city.state}. Explore metro areas and services below.`,
@@ -55,7 +68,10 @@ export function buildSeoPageContent(
   if (pageType === "metro_hub" && metro) {
     return {
       metaTitle: `${metro.name} Facilities Services | ${city.name}, ${city.state}`,
-      metaDescription: `Servicelink delivers facilities management, cleaning, maintenance, and support services for businesses in ${metro.name}, ${city.name}, ${city.state}.`,
+      metaDescription: clamp(
+        `Facilities management, cleaning, maintenance, and support services for businesses in ${metro.name}, ${city.name}, ${city.state}.`,
+        155,
+      ),
       h1: metro.name,
       intro: `Servicelink delivers facilities management, cleaning, maintenance, and specialist support for businesses in ${metro.name} and the wider ${city.name}, ${city.state} region.`,
       body: `Whether you manage a single site or a multi-location portfolio in ${metro.name}, we deliver practical, accountable facilities services tailored to local businesses across ${city.name}.`,
@@ -69,7 +85,10 @@ export function buildSeoPageContent(
   if (pageType === "city_service") {
     return {
       metaTitle: `${service.name} in ${city.name}, ${city.state}`,
-      metaDescription: `${service.summary} Servicelink delivers ${service.name.toLowerCase()} for businesses across ${city.name}, ${city.state}.`,
+      metaDescription: clamp(
+        `${service.summary} Delivered for businesses across ${city.name}, ${city.state}.`,
+        155,
+      ),
       h1: `${service.name} in ${city.name}`,
       intro: `Servicelink delivers professional ${service.name.toLowerCase()} for businesses across ${city.name}, ${city.state} — with clear communication and measurable results.`,
       body: `${service.description} We deliver ${service.name.toLowerCase()} for businesses across ${city.name}, ${city.state} and surrounding metro areas with responsive teams and documented service standards.`,
@@ -82,7 +101,10 @@ export function buildSeoPageContent(
 
   return {
     metaTitle: `${service.name} in ${metro.name}, ${city.name}`,
-    metaDescription: `${service.summary} Servicelink delivers ${service.name.toLowerCase()} for businesses in ${metro.name}, ${city.name}, ${city.state}.`,
+    metaDescription: clamp(
+      `${service.summary} Delivered for businesses in ${metro.name}, ${city.name}, ${city.state}.`,
+      155,
+    ),
     h1: `${service.name} in ${metro.name}`,
     intro: `Servicelink delivers ${service.name.toLowerCase()} for businesses in ${metro.name}, ${city.name} and surrounding ${city.state} locations.`,
     body: `${service.description} We deliver reliable, audit-ready ${service.name.toLowerCase()} for businesses across ${metro.name} and ${city.name}.`,
