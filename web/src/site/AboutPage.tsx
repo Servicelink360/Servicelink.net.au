@@ -332,11 +332,8 @@ export default async function AboutPage() {
             </h2>
           </div>
           <div className="m1-service-cta__actions">
-            <Link href={buildContactUrl("about")} className="m1-btn m1-btn--light m1-btn--lg">
-              Book a briefing
-            </Link>
-            <Link href="/#work" className="m1-btn m1-btn--line m1-btn--lg m1-btn--line-light">
-              View services
+            <Link href="/quote" className="m1-btn m1-btn--light m1-btn--lg">
+              Free Quote
             </Link>
           </div>
         </div>
