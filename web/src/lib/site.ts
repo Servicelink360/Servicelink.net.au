@@ -40,6 +40,15 @@ export const navigation = [
   { href: "/contact", label: "Contact" },
 ] as const;
 
+/** State hubs in the Locations nav dropdown (capital city SEO pages). */
+export const locationStateLinks = [
+  { href: "/locations/sydney", label: "NSW" },
+  { href: "/locations/melbourne", label: "VIC" },
+  { href: "/locations/brisbane", label: "QLD" },
+  { href: "/locations/perth", label: "WA" },
+  { href: "/locations/adelaide", label: "South Australia" },
+] as const;
+
 export const heroSlides = [
   {
     title: "Sport Grounds Facilities Management",
