@@ -91,14 +91,6 @@ export const clientsOverview = {
     "At Servicelink, we are proud to serve a diverse and distinguished clientele that includes NSW Government and some of Sydney's most respected local councils. Our commitment to delivering exceptional facilities management services has enabled us to build strong, lasting partnerships with our clients.",
 };
 
-export const clientLinks = [
-  { href: "/clients", label: "Our Clients" },
-  ...clients.map((client) => ({
-    href: `/clients/${client.slug}`,
-    label: client.title,
-  })),
-];
-
 export function getClient(slug: string): Client | undefined {
   return clients.find((client) => client.slug === slug);
 }

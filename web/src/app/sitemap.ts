@@ -1,6 +1,5 @@
 import type { MetadataRoute } from "next";
 import { eq } from "drizzle-orm";
-import { clients } from "@/lib/clients";
 import { getDb, isDatabaseConfigured } from "@/lib/db";
 import { newsPosts } from "@/lib/db/schema";
 import { legalPages } from "@/lib/legal";
@@ -35,16 +34,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: "monthly",
       priority: 0.85,
     },
-    {
-      url: absoluteUrl("/what-we-do"),
-      changeFrequency: "monthly",
-      priority: 0.8,
-    },
     { url: absoluteUrl("/join"), changeFrequency: "monthly", priority: 0.6 },
     { url: absoluteUrl("/contact"), changeFrequency: "monthly", priority: 0.9 },
     { url: absoluteUrl("/quote"), changeFrequency: "monthly", priority: 0.9 },
     { url: absoluteUrl("/news"), changeFrequency: "weekly", priority: 0.7 },
-    { url: absoluteUrl("/clients"), changeFrequency: "monthly", priority: 0.8 },
     { url: absoluteUrl("/locations"), changeFrequency: "weekly", priority: 0.9 },
   ];
 
@@ -53,12 +46,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     url: absoluteUrl(`/services/${service.slug}`),
     changeFrequency: "monthly",
     priority: 0.8,
-  }));
-
-  const clientRoutes: MetadataRoute.Sitemap = clients.map((client) => ({
-    url: absoluteUrl(`/clients/${client.slug}`),
-    changeFrequency: "monthly",
-    priority: 0.7,
   }));
 
   const legalRoutes: MetadataRoute.Sitemap = legalPages.map((page) => ({
@@ -104,7 +91,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   return [
     ...staticRoutes,
     ...serviceRoutes,
-    ...clientRoutes,
     ...legalRoutes,
     ...newsRoutes,
     ...locationRoutes,

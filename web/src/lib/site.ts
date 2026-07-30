@@ -37,10 +37,8 @@ export const navigation = [
   { href: "/", label: "Home" },
   { href: "/about", label: "About Us" },
   { href: "/services", label: "Our Services" },
-  { href: "/what-we-do", label: "What We Do" },
+  { href: "/contact", label: "Contact" },
 ] as const;
-
-export const clientsNavLabel = "Clients";
 
 export const heroSlides = [
   {

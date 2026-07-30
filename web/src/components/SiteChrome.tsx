@@ -16,8 +16,6 @@ function isMainSite(pathname: string | null) {
     return false;
   }
   if (pathname.startsWith("/legal")) return false;
-  if (pathname.startsWith("/clients")) return false;
-  if (pathname.startsWith("/what-we-do")) return false;
   return true;
 }
 
