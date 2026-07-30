@@ -38,7 +38,11 @@ function localDevOriginsWithPorts(hosts: string[]): string[] {
 
 const nextConfig: NextConfig = {
   allowedDevOrigins,
-  images: {},
+  // CMS uploads land in public/ after process start; the optimizer 404-caches those
+  // paths and returns 400. Serve upload (and other public) images directly instead.
+  images: {
+    unoptimized: true,
+  },
   async redirects() {
     return [
       { source: "/about-us", destination: "/about", permanent: true },
