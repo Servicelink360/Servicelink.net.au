@@ -3,7 +3,7 @@ export const HOME_PAGE_SLUG = "home";
 export const SYSTEM_SITE_PAGES = [
   { slug: "home", title: "Homepage", pageType: "homepage", publicPath: "/" },
   { slug: "service360", title: "Service360", pageType: "service360", publicPath: "/service360" },
-  { slug: "about", title: "About Us", pageType: "template", publicPath: "/about" },
+  { slug: "about", title: "About Us", pageType: "about", publicPath: "/about" },
   { slug: "services", title: "Services", pageType: "template", publicPath: "/services" },
   { slug: "news", title: "News", pageType: "news", publicPath: "/news" },
   { slug: "contact", title: "Contact", pageType: "template", publicPath: "/contact" },
@@ -33,6 +33,12 @@ export const defaultNewsSettings = {
     "Servicelink team delivering facilities management services across NSW",
   emptyBadgeNumber: "18",
   emptyBadgeLabel: "Years of service",
+};
+
+export const defaultAboutSettings = {
+  heroImage: "/uploads/images/services/facilities-management/hero.jpg",
+  heroImageAlt:
+    "Servicelink facilities management at a commercial site in Sydney",
 };
 
 export const defaultHomepageSettings = {

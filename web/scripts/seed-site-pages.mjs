@@ -1,6 +1,7 @@
 import postgres from "postgres";
 import {
   SYSTEM_SITE_PAGES,
+  defaultAboutSettings,
   defaultHomepageSettings,
   defaultNewsSettings,
   defaultService360Settings,
@@ -59,6 +60,7 @@ for (const page of SYSTEM_SITE_PAGES) {
   if (page.pageType === "homepage") settings = JSON.stringify(homepageSettings);
   if (page.pageType === "service360") settings = JSON.stringify(defaultService360Settings);
   if (page.pageType === "news") settings = JSON.stringify(defaultNewsSettings);
+  if (page.pageType === "about") settings = JSON.stringify(defaultAboutSettings);
 
   await sql`
     INSERT INTO site_pages (title, slug, page_type, content, settings, published)

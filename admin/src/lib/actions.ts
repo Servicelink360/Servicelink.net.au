@@ -40,6 +40,7 @@ import {
 import {
   HOME_PAGE_SLUG,
   NEWS_PAGE_SLUG,
+  ABOUT_PAGE_SLUG,
   SERVICE360_PAGE_SLUG,
   isSystemSitePageSlug,
 } from "@/lib/site-pages";
@@ -47,6 +48,10 @@ import {
   parseNewsSettings,
   type NewsPageSettings,
 } from "@/lib/news-page";
+import {
+  parseAboutSettings,
+  type AboutPageSettings,
+} from "@/lib/about-page";
 
 function optionalInternalHero(value: string | null | undefined, label: string) {
   const trimmed = String(value ?? "").trim();
@@ -951,6 +956,48 @@ export async function saveNewsPage(formData: FormData) {
 
   revalidatePath("/dashboard/pages");
   revalidatePath("/news");
+  redirect(`/dashboard/pages/${id}`);
+}
+
+export async function saveAboutPage(formData: FormData) {
+  await requireAdminSession();
+  const db = getDb();
+
+  const id = String(formData.get("id") ?? "").trim();
+  if (!id) throw new Error("Page id is required.");
+
+  const [page] = await db.select().from(sitePages).where(eq(sitePages.id, id)).limit(1);
+  if (!page || page.pageType !== "about" || page.slug !== ABOUT_PAGE_SLUG) {
+    throw new Error("About page record not found.");
+  }
+
+  const heroImage =
+    optionalInternalHero(String(formData.get("heroImage") ?? ""), "Hero image") ??
+    parseAboutSettings(null).heroImage;
+
+  const settings: AboutPageSettings = {
+    heroImage,
+    heroImageAlt: String(formData.get("heroImageAlt") ?? "").trim(),
+  };
+
+  if (!settings.heroImageAlt) {
+    throw new Error("Hero image alt text is required.");
+  }
+
+  const published = formData.get("published") === "on";
+
+  await db
+    .update(sitePages)
+    .set({
+      title: "About Us",
+      settings: JSON.stringify(settings),
+      published,
+      updatedAt: new Date(),
+    })
+    .where(eq(sitePages.id, id));
+
+  revalidatePath("/dashboard/pages");
+  revalidatePath("/about");
   redirect(`/dashboard/pages/${id}`);
 }
 

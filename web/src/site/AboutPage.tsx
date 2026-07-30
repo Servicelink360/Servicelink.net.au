@@ -13,7 +13,8 @@ import {
   SERVICE360_FLOW,
   SERVICE360_URL,
 } from "./service360-content";
-import { ABOUT_VALUES, COMPANY_STATS, getServiceImage } from "./data";
+import { ABOUT_VALUES, COMPANY_STATS } from "./data";
+import { getAboutPageSettings } from "@/lib/about-page-settings";
 import { SiteFooter } from "./SiteFooter";
 import { SiteNav } from "./SiteNav";
 
@@ -23,6 +24,8 @@ export const metadata: Metadata = createPageMetadata({
     "Learn about Servicelink — facilities partner since 2018. Based in Five Dock, NSW, delivering integrated services powered by Service360.",
   path: "/about",
 });
+
+export const dynamic = "force-dynamic";
 
 const STRENGTHS = [
   {
@@ -57,7 +60,10 @@ const SUPPORT_ITEMS = [
 ] as const;
 
 export default async function AboutPage() {
-  const opsStats = await getService360OpsStats();
+  const [opsStats, aboutSettings] = await Promise.all([
+    getService360OpsStats(),
+    getAboutPageSettings(),
+  ]);
   const sitesLabel =
     opsStats.sitesCount > 0 ? formatSitesBadge(opsStats.sitesCount) : null;
   const sitesCopy =
@@ -106,8 +112,8 @@ export default async function AboutPage() {
           <div className="m1-service-hero__visual">
             <div className="m1-service-hero__frame">
               <Image
-                src={getServiceImage("facilities-management")}
-                alt="Servicelink facilities management team at a commercial site in Sydney"
+                src={aboutSettings.heroImage}
+                alt={aboutSettings.heroImageAlt}
                 fill
                 className="object-cover"
                 sizes="(max-width: 1024px) 100vw, 50vw"

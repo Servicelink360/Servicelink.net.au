@@ -5,6 +5,7 @@ import { getDb } from "@/lib/db";
 import { sitePages } from "@/lib/db/schema";
 import { saveSitePage } from "@/lib/actions";
 import { HomepagePageForm } from "@/components/HomepagePageForm";
+import { AboutPageForm } from "@/components/AboutPageForm";
 import { NewsPageForm } from "@/components/NewsPageForm";
 import { Service360PageForm } from "@/components/Service360PageForm";
 import { TemplateSitePageForm } from "@/components/TemplateSitePageForm";
@@ -42,6 +43,8 @@ export default async function EditPagePage({ params }: EditPageProps) {
       {page.pageType === "service360" ? <Service360PageForm page={page} /> : null}
 
       {page.pageType === "news" ? <NewsPageForm page={page} /> : null}
+
+      {page.pageType === "about" ? <AboutPageForm page={page} /> : null}
 
       {page.pageType === "template" ? <TemplateSitePageForm page={page} /> : null}
 
