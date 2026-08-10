@@ -6,6 +6,7 @@
  */
 import postgres from "postgres";
 import { SERVICE_DEFINITIONS } from "./lib/service-definitions.mjs";
+import { buildPhase2Allowlist, PHASE2_METROS } from "./publish-seo-phase2.mjs";
 
 const PHASE1_CITIES = [
   "sydney",
@@ -121,7 +122,7 @@ if (!dryRun) {
     WHERE type = 'city' AND slug = ANY(${PHASE1_CITIES})
   `;
 
-  // Metros: only Sydney top 10 published
+  // Metros: Sydney top 10 + Phase 2 metros
   await sql`
     UPDATE locations
     SET published = false
@@ -136,6 +137,30 @@ if (!dryRun) {
       AND c.slug = 'sydney'
       AND m.slug = ANY(${SYDNEY_TOP_METROS})
   `;
+
+  for (const [citySlug, metroSlugs] of Object.entries(PHASE2_METROS)) {
+    await sql`
+      UPDATE locations m
+      SET published = true
+      FROM locations c
+      WHERE m.type = 'metro'
+        AND m.parent_id = c.id
+        AND c.slug = ${citySlug}
+        AND m.slug = ANY(${metroSlugs})
+    `;
+  }
+
+  // Re-apply Phase 2 pages (phase1 wipe would otherwise drop them)
+  const phase2 = buildPhase2Allowlist();
+  const phase2Published = await sql`
+    UPDATE seo_pages
+    SET published = true,
+        no_index = false,
+        updated_at = now()
+    WHERE path = ANY(${phase2})
+    RETURNING path
+  `;
+  console.log(`Phase 2 rows re-published: ${phase2Published.length}`);
 
   const after = await sql`
     SELECT

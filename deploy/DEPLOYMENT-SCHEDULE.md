@@ -95,21 +95,18 @@ Script: `web/scripts/publish-seo-phase1.mjs`
 
 ---
 
-### Phase 2 — next (target: +200–400 pages)
+### Phase 2 — live (~360 pages)
 
-**When:** after Phase 1 is indexing cleanly (Search Console: coverage + impressions stable for 2–4 weeks).
+**Melbourne / Brisbane / Perth / Adelaide** — top 10 metros each + metro × service.
 
-**Add (suggested order)**
+```bash
+cd /var/www/servicelink/web
+npm run db:publish-seo-phase2
+```
 
-1. **Melbourne** top ~8–10 metros + services  
-2. **Brisbane** top ~8–10 metros + services  
-3. **Perth** top ~8–10 metros + services  
-4. **Adelaide** top ~8–10 metros + services  
-5. **Canberra / Newcastle / Gold Coast / Central Coast** — hub metros only (4–6 each), then services if demand exists  
+Script: `web/scripts/publish-seo-phase2.mjs` (additive). Phase 1 script also re-applies Phase 2 after its allowlist wipe.
 
-**Do not** publish full metro grids for every Phase 1 city yet.
-
-**Approx total after Phase 2:** ~500–700 indexed location pages.
+**Approx total after Phase 1+2:** ~630 indexed location pages.
 
 ---
 
