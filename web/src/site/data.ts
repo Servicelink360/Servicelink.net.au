@@ -29,7 +29,7 @@ export const CERTIFICATIONS = [
   "ISO 14001",
   "ISO 45001",
   "WHS Compliant",
-  "Green Star Partner",
+  "Conserve Certified",
 ];
 
 export const COMPANY_STATS = [

@@ -44,7 +44,7 @@ const CAPABILITIES = [
     id: "03",
     title: "Outdoor & Environment",
     body: "Grounds, landscaping, arboriculture, and waste management with sustainability metrics built into every contract.",
-    tags: ["Green Star alignment", "Water-sensitive design", "Native planting"],
+    tags: ["Conserve Certified", "Water-sensitive design", "Native planting"],
   },
   {
     id: "04",
