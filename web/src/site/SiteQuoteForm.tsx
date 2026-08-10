@@ -176,6 +176,7 @@ export function SiteQuoteForm({
             <option value="1–3 months">1–3 months</option>
             <option value="3–6 months">3–6 months</option>
             <option value="Planning only">Planning only</option>
+            <option value="Other">Other</option>
           </select>
         </label>
       </div>
