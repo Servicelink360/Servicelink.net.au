@@ -4,6 +4,17 @@ import { FormEvent, useState } from "react";
 
 type FormState = "idle" | "submitting" | "success" | "error";
 
+const CONTACT_SUBJECTS = [
+  "General enquiry",
+  "Request a quote",
+  "Existing client support",
+  "New site / onboarding",
+  "Supplier / partnership",
+  "Careers / join the team",
+  "Feedback or complaint",
+  "Other",
+] as const;
+
 type SiteContactFormProps = {
   source?: string;
   variant?: "cta" | "hero";
@@ -37,7 +48,7 @@ export function SiteContactForm({
           email: String(formData.get("email") ?? ""),
           phone: String(formData.get("phone") ?? ""),
           company: String(formData.get("company") ?? ""),
-          portfolioSize: String(formData.get("size") ?? ""),
+          subject: String(formData.get("subject") ?? ""),
           message: String(formData.get("message") ?? ""),
           referrer: referrerLabel,
           source,
@@ -113,16 +124,16 @@ export function SiteContactForm({
       </div>
       <div className={isHero ? "m1-contact-form__row" : "sl-form__row"}>
         <label className={isHero ? "m1-contact-form__field" : "sl-field"}>
-          <span>Portfolio size</span>
-          <select name="size" defaultValue="">
+          <span>Subject</span>
+          <select name="subject" defaultValue="" required>
             <option value="" disabled>
-              Select range
+              Select a subject
             </option>
-            <option value="1-10">1–10 sites</option>
-            <option value="11-50">11–50 sites</option>
-            <option value="51-200">51–200 sites</option>
-            <option value="200+">200+ sites</option>
-            <option value="Other">Other</option>
+            {CONTACT_SUBJECTS.map((subject) => (
+              <option key={subject} value={subject}>
+                {subject}
+              </option>
+            ))}
           </select>
         </label>
       </div>

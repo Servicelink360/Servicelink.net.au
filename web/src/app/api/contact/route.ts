@@ -26,7 +26,7 @@ export async function POST(request: Request) {
     return validationErrorResponse(parsed.error);
   }
 
-  const { name, email, phone, company, portfolioSize, message, source, referrer } =
+  const { name, email, phone, company, subject, message, source, referrer } =
     parsed.data;
 
   const fullMessage = referrer
@@ -40,7 +40,8 @@ export async function POST(request: Request) {
     email,
     phone: phone || null,
     company: company || null,
-    portfolioSize: portfolioSize || null,
+    // Reuse portfolio_size column to store contact subject (no schema migration).
+    portfolioSize: subject.slice(0, 32),
     message: fullMessage,
     source: source ?? "website",
   });
@@ -48,6 +49,7 @@ export async function POST(request: Request) {
   console.info("[contact] saved", {
     name,
     email,
+    subject,
     destination: site.contact.email,
   });
 
@@ -59,7 +61,7 @@ export async function POST(request: Request) {
     company,
     message: fullMessage,
     extra: {
-      Portfolio: portfolioSize,
+      Subject: subject,
       Source: source ?? "website",
     },
   });

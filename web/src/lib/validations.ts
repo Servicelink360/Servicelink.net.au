@@ -8,7 +8,7 @@ export const contactSchema = z.object({
   email,
   phone: z.string().trim().max(64).optional(),
   company: z.string().trim().max(255).optional(),
-  portfolioSize: z.string().trim().max(32).optional(),
+  subject: z.string().trim().min(1, "Please select a subject.").max(64),
   message: z.string().trim().min(1, "Message is required.").max(5000),
   source: z.string().trim().max(64).optional(),
   referrer: z.string().trim().max(255).optional(),

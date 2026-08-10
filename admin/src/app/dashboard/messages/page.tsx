@@ -14,7 +14,7 @@ export default async function MessagesPage() {
       <h1 style={{ marginTop: 0 }}>Contact messages</h1>
       <p style={{ marginTop: 0, color: "#64748b" }}>
         Enquiries submitted from the website contact form. Name, email, phone,
-        organisation, portfolio size and message are stored here.
+        organisation, subject and message are stored here.
       </p>
       <div className="admin-panel">
         <table className="admin-table">
@@ -50,9 +50,9 @@ export default async function MessagesPage() {
                     )}
                     {row.company ? <div>Org: {row.company}</div> : <div>Org: —</div>}
                     {row.portfolioSize ? (
-                      <div>Portfolio: {row.portfolioSize}</div>
+                      <div>Subject: {row.portfolioSize}</div>
                     ) : (
-                      <div>Portfolio: —</div>
+                      <div>Subject: —</div>
                     )}
                     <div>Source: {row.source}</div>
                   </td>
