@@ -79,14 +79,11 @@ await sql`
 
 At the centre of our delivery model is Service360: one platform for site visibility, work activity, and operational reporting. Whether you manage a single commercial site or a national portfolio, the goal is the same — fewer surprises, faster decisions, and accountable service delivery.
 
-## What you can do on the new site
+What you can do on the new site
 
-- Explore our full facilities management service range, from cleaning and grounds care to maintenance and asset support
-- Find local coverage through our locations directory
-- Request a tailored quote or contact our team for support
-- Follow news and updates as we grow across Sydney, NSW, and nationally
+Explore our full facilities management service range, from cleaning and grounds care to maintenance and asset support. Find local coverage through our locations directory. Request a tailored quote or contact our team for support. Follow news and updates as we grow across Sydney, NSW, and nationally.
 
-## Why this matters
+Why this matters
 
 Facilities management succeeds when information is current and ownership is clear. Our updated digital presence reflects how Servicelink operates every day: practical communication, documented standards, and technology that keeps every site visible.
 
