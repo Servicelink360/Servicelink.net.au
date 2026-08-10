@@ -20,6 +20,7 @@
     "db:generate-seo-pages": "node --env-file=.env scripts/generate-all-seo-pages.mjs",
     "db:seed-gemini-services": "node --env-file=.env scripts/seed-gemini-services.mjs",
     "db:seed-gemini-locations": "node --env-file=.env scripts/seed-gemini-location-pages.mjs",
+    "db:seed-gemini-hubs": "node --env-file=.env scripts/seed-gemini-location-hubs.mjs",
     "db:seed-gemini-content": "node --env-file=.env scripts/seed-gemini-content.mjs",
     "db:publish-seo-phase1": "node --env-file=.env scripts/publish-seo-phase1.mjs",
     "db:publish-seo-phase2": "node --env-file=.env scripts/publish-seo-phase2.mjs",

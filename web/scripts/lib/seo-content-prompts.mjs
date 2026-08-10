@@ -89,3 +89,62 @@ Rules:
 - metaTitle and metaDescription must fit typical SEO length limits.
 - Do not append "| Servicelink" (or the brand name) to metaTitle — branding is added by the site.`;
 }
+
+/**
+ * Hub pages (city overview + metro overviews) — not service-specific.
+ * @param {{ slug: string, name: string, state: string }} city
+ * @param {{ slug: string, name: string }[]} metros
+ * @param {{ includeCityHub?: boolean }} [options]
+ */
+export function buildLocationHubPrompt(city, metros, options = {}) {
+  const includeCityHub = options.includeCityHub !== false;
+  const metroList =
+    metros.length > 0
+      ? metros.map((metro) => `- ${metro.name} (slug: "${metro.slug}")`).join("\n")
+      : "(no metro hubs in this batch)";
+
+  const cityHubBlock = includeCityHub
+    ? `"cityHub": {
+    "metaTitle": "max 60 chars, facilities services in ${city.name}",
+    "metaDescription": "max 155 chars",
+    "h1": "clear city hub heading",
+    "intro": "2–3 sentences introducing ${BRAND} across ${city.name}",
+    "body": "3–4 paragraphs (250–400 words) covering the range of facilities services for businesses in ${city.name}, ${city.state}, local commercial context, and how to explore metro areas and services"
+  },`
+    : `"cityHub": null,`;
+
+  return `You are writing SEO hub/landing page content for ${BRAND}, an Australian facilities management company.
+
+Location: ${city.name}, ${city.state}
+
+These pages are location hubs (overviews), not single-service pages. Cover the full facilities offering at a high level: facilities management, cleaning, ground maintenance, tree services, building maintenance, roof/gutter/solar cleaning, asset management, and support services.
+
+Metro areas in this batch:
+${metroList}
+
+Write location-specific content that references ${city.name} and ${city.state} naturally. Each metro hub must feel unique to that suburb/metro — not a find-and-replace of another area.
+
+Return JSON only:
+{
+  ${cityHubBlock}
+  "metroHubs": [
+    {
+      "metroSlug": "mosman",
+      "metaTitle": "max 60 chars, include metro and ${city.name}",
+      "metaDescription": "max 155 chars",
+      "h1": "heading with metro name",
+      "intro": "2–3 sentences specific to this metro",
+      "body": "2–3 paragraphs (180–280 words) tailored to businesses in this metro — property types, commercial context, and why local operators choose ${BRAND}"
+    }
+  ]
+}
+
+Rules:
+- ${includeCityHub ? "cityHub is required." : "cityHub must be null (metro hubs only in this batch)."}
+- metroHubs must include one entry for every metro slug listed above (same slugs, same count).
+- Use plain text in body fields; separate paragraphs with \\n\\n.
+- Do not invent street addresses, phone numbers, or client names.
+- metaTitle and metaDescription must fit typical SEO length limits.
+- Do not append "| Servicelink" (or the brand name) to metaTitle — branding is added by the site.
+- Do not invent certifications, awards, or named clients.`;
+}
