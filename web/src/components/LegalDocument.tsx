@@ -6,10 +6,17 @@ type LegalDocumentProps = {
 
 export function LegalDocument({ page }: LegalDocumentProps) {
   return (
-    <article className="sl-container" style={{ paddingTop: "4rem", paddingBottom: "5rem", maxWidth: "48rem" }}>
+    <article
+      className="sl-container"
+      style={{
+        paddingTop: "6.5rem",
+        paddingBottom: "5rem",
+        maxWidth: "48rem",
+      }}
+    >
       <p
         style={{
-          fontSize: "0.8rem",
+          fontSize: "0.75rem",
           fontWeight: 600,
           letterSpacing: "0.06em",
           textTransform: "uppercase",
@@ -18,22 +25,48 @@ export function LegalDocument({ page }: LegalDocumentProps) {
       >
         Last updated: {page.lastUpdated}
       </p>
-      <h1 className="sl-display" style={{ fontSize: "clamp(2rem, 4vw, 3rem)", marginTop: "0.5rem" }}>
+      <h1
+        style={{
+          marginTop: "0.75rem",
+          fontFamily: "var(--font-m1-serif), Georgia, serif",
+          fontSize: "clamp(1.75rem, 3vw, 2.25rem)",
+          fontWeight: 600,
+          lineHeight: 1.2,
+          letterSpacing: "-0.02em",
+          color: "var(--sl-ink)",
+        }}
+      >
         {page.title}
       </h1>
-      <p className="sl-lead" style={{ marginTop: "1rem" }}>
+      <p
+        className="sl-lead"
+        style={{ marginTop: "0.85rem", fontSize: "1.05rem" }}
+      >
         {page.description}
       </p>
 
-      <div style={{ marginTop: "3rem", display: "grid", gap: "2.5rem" }}>
+      <div style={{ marginTop: "2.75rem", display: "grid", gap: "2.25rem" }}>
         {page.sections.map((section) => (
           <section key={section.title}>
-            <h2 style={{ fontSize: "1.25rem", fontWeight: 600, color: "var(--sl-ink)" }}>
+            <h2
+              style={{
+                fontSize: "1.125rem",
+                fontWeight: 600,
+                color: "var(--sl-ink)",
+              }}
+            >
               {section.title}
             </h2>
-            <div style={{ marginTop: "1rem", display: "grid", gap: "1rem" }}>
+            <div style={{ marginTop: "0.85rem", display: "grid", gap: "0.9rem" }}>
               {section.paragraphs.map((paragraph) => (
-                <p key={paragraph} style={{ fontSize: "0.95rem", lineHeight: 1.7, color: "var(--sl-muted)" }}>
+                <p
+                  key={paragraph}
+                  style={{
+                    fontSize: "0.95rem",
+                    lineHeight: 1.7,
+                    color: "var(--sl-muted)",
+                  }}
+                >
                   {paragraph}
                 </p>
               ))}
