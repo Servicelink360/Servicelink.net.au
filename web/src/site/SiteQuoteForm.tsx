@@ -38,7 +38,10 @@ export function SiteQuoteForm({
     const serviceTitle =
       serviceSlug === "multiple"
         ? "Multiple services"
-        : (services.find((item) => item.slug === serviceSlug)?.title ?? serviceSlug);
+        : serviceSlug === "other"
+          ? "Other"
+          : (services.find((item) => item.slug === serviceSlug)?.title ??
+            serviceSlug);
 
     try {
       const response = await fetch("/api/quote", {
@@ -136,6 +139,7 @@ export function SiteQuoteForm({
               </option>
             ))}
             <option value="multiple">Multiple services</option>
+            <option value="other">Other</option>
           </select>
         </label>
         <label className="m1-contact-form__field">
