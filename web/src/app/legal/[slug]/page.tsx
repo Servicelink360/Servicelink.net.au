@@ -45,7 +45,9 @@ export default async function LegalRoutePage({ params }: LegalRouteProps) {
       <main>
         <LegalDocument page={page} />
       </main>
-      <SiteFooter />
+      <div className="sl-page m1-bottom">
+        <SiteFooter />
+      </div>
     </>
   );
 }
