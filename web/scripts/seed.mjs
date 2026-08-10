@@ -59,24 +59,63 @@ await sql`
 `;
 
 await sql`
-  INSERT INTO news_posts (title, slug, summary, body, published, published_at)
+  ALTER TABLE news_posts
+  ADD COLUMN IF NOT EXISTS meta_title varchar(255),
+  ADD COLUMN IF NOT EXISTS meta_description text,
+  ADD COLUMN IF NOT EXISTS featured_image varchar(512),
+  ADD COLUMN IF NOT EXISTS updated_at timestamptz NOT NULL DEFAULT now()
+`;
+
+await sql`
+  INSERT INTO news_posts (
+    title, slug, summary, body, meta_title, meta_description,
+    featured_image, published, published_at
+  )
   VALUES (
-    'Welcome to Servicelink',
-    'welcome-to-servicelink',
-    'Servicelink is your partner in integrated facilities management across Australia.',
-    'We are pleased to launch our updated digital presence. Register for updates to hear about service expansions, operational insights, and news from the Servicelink team.',
+    'Servicelink launches updated website and Service360 visibility',
+    'servicelink-launches-updated-website-and-service360',
+    'Our new website makes it easier to explore services, locations, and Service360 — the platform that brings every site into one clear view.',
+    $body$Servicelink has launched an updated website built for the way facilities teams actually work — clear service pages, location coverage across Australia, and a direct path to request a quote or get in touch.
+
+At the centre of our delivery model is Service360: one platform for site visibility, work activity, and operational reporting. Whether you manage a single commercial site or a national portfolio, the goal is the same — fewer surprises, faster decisions, and accountable service delivery.
+
+## What you can do on the new site
+
+- Explore our full facilities management service range, from cleaning and grounds care to maintenance and asset support
+- Find local coverage through our locations directory
+- Request a tailored quote or contact our team for support
+- Follow news and updates as we grow across Sydney, NSW, and nationally
+
+## Why this matters
+
+Facilities management succeeds when information is current and ownership is clear. Our updated digital presence reflects how Servicelink operates every day: practical communication, documented standards, and technology that keeps every site visible.
+
+If you would like a briefing on Service360 or a quote for your sites, our team is ready to help.$body$,
+    'Servicelink launches updated website and Service360',
+    'Explore Servicelink’s updated website and Service360 platform for clearer facilities visibility, local service coverage, and faster quotes across Australia.',
+    '/uploads/images/site/news-hero-1785211411570.webp',
     true,
     now()
   )
-  ON CONFLICT (slug) DO NOTHING
+  ON CONFLICT (slug) DO UPDATE SET
+    title = EXCLUDED.title,
+    summary = EXCLUDED.summary,
+    body = EXCLUDED.body,
+    meta_title = EXCLUDED.meta_title,
+    meta_description = EXCLUDED.meta_description,
+    featured_image = COALESCE(news_posts.featured_image, EXCLUDED.featured_image),
+    published = true,
+    published_at = COALESCE(news_posts.published_at, EXCLUDED.published_at)
 `;
 
 const [seeded] = await sql`
-  SELECT id FROM news_posts WHERE slug = 'welcome-to-servicelink' LIMIT 1
+  SELECT id FROM news_posts
+  WHERE slug = 'servicelink-launches-updated-website-and-service360'
+  LIMIT 1
 `;
 
 if (seeded) {
-  console.log("Sample news post ready (welcome-to-servicelink).");
+  console.log("Sample news post ready (servicelink-launches-updated-website-and-service360).");
 }
 
 console.log("Database schema ready.");
