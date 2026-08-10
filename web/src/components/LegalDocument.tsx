@@ -7,7 +7,17 @@ type LegalDocumentProps = {
 export function LegalDocument({ page }: LegalDocumentProps) {
   return (
     <article className="sl-container" style={{ paddingTop: "4rem", paddingBottom: "5rem", maxWidth: "48rem" }}>
-      <p className="sl-kicker">Last updated: {page.lastUpdated}</p>
+      <p
+        style={{
+          fontSize: "0.8rem",
+          fontWeight: 600,
+          letterSpacing: "0.06em",
+          textTransform: "uppercase",
+          color: "var(--sl-accent, #1b7a4e)",
+        }}
+      >
+        Last updated: {page.lastUpdated}
+      </p>
       <h1 className="sl-display" style={{ fontSize: "clamp(2rem, 4vw, 3rem)", marginTop: "0.5rem" }}>
         {page.title}
       </h1>
