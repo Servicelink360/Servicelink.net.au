@@ -1,4 +1,4 @@
-import Image from "next/image";
+import Image from "@/components/SiteImage";
 import Link from "next/link";
 import { services } from "@/lib/services";
 import { serviceImages } from "./data";

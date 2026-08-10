@@ -24,6 +24,7 @@
     "db:publish-seo-phase1": "node --env-file=.env scripts/publish-seo-phase1.mjs",
     "db:fix-seo-meta": "node --env-file=.env scripts/fix-seo-meta.mjs",
     "db:check-gemini-progress": "node --env-file=.env scripts/check-gemini-progress.mjs",
+    "db:compress-uploads": "node --env-file=.env scripts/compress-existing-uploads.mjs",
     "db:test": "node --env-file=.env scripts/test-db.mjs",
     "db:connect": "node scripts/connect-db.mjs"
   },
@@ -45,6 +46,7 @@
     "drizzle-kit": "^0.31.10",
     "eslint": "^9",
     "eslint-config-next": "16.2.9",
+    "sharp": "^0.35.3",
     "tailwindcss": "^4",
     "typescript": "^5"
   }

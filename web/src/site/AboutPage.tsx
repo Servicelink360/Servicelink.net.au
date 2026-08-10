@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import Image from "next/image";
+import Image from "@/components/SiteImage";
 import Link from "next/link";
 import { createPageMetadata } from "@/lib/seo";
 import { buildContactUrl } from "@/lib/contact-context";

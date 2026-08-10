@@ -4,7 +4,7 @@ export const site = {
     "Partner in facilities management — excellence in service to our communities with care and passion.",
   description:
     "Integrated facilities management for businesses across Sydney and NSW — cleaning, maintenance, grounds care, and more.",
-  url: "https://servicelink.net.au",
+  url: "https://www.servicelink.net.au",
   contact: {
     phone: "0420 220 220",
     serviceNumber: "0420220220",

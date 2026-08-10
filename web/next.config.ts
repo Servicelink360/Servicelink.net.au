@@ -38,10 +38,11 @@ function localDevOriginsWithPorts(hosts: string[]): string[] {
 
 const nextConfig: NextConfig = {
   allowedDevOrigins,
-  // CMS uploads land in public/ after process start; the optimizer 404-caches those
-  // paths and returns 400. Serve upload (and other public) images directly instead.
+  // Static assets use the optimizer. CMS /uploads paths bypass it via SiteImage
+  // (new files after process start get 404-cached by /_next/image otherwise).
   images: {
-    unoptimized: true,
+    formats: ["image/avif", "image/webp"],
+    minimumCacheTTL: 60 * 60 * 24 * 30,
   },
   async redirects() {
     return [
