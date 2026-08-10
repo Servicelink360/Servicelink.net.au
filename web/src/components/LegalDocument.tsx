@@ -6,22 +6,24 @@ type LegalDocumentProps = {
 
 export function LegalDocument({ page }: LegalDocumentProps) {
   return (
-    <article className="mx-auto max-w-3xl px-4 py-16 md:px-6 md:py-20">
-      <p className="text-sm font-medium text-emerald-700">
-        Last updated: {page.lastUpdated}
-      </p>
-      <h1 className="mt-2 text-4xl font-bold tracking-tight text-slate-900">
+    <article className="sl-container" style={{ paddingTop: "4rem", paddingBottom: "5rem", maxWidth: "48rem" }}>
+      <p className="sl-kicker">Last updated: {page.lastUpdated}</p>
+      <h1 className="sl-display" style={{ fontSize: "clamp(2rem, 4vw, 3rem)", marginTop: "0.5rem" }}>
         {page.title}
       </h1>
-      <p className="mt-4 text-lg leading-8 text-slate-600">{page.description}</p>
+      <p className="sl-lead" style={{ marginTop: "1rem" }}>
+        {page.description}
+      </p>
 
-      <div className="mt-12 space-y-10">
+      <div style={{ marginTop: "3rem", display: "grid", gap: "2.5rem" }}>
         {page.sections.map((section) => (
           <section key={section.title}>
-            <h2 className="text-xl font-semibold text-slate-900">{section.title}</h2>
-            <div className="mt-4 space-y-4">
+            <h2 style={{ fontSize: "1.25rem", fontWeight: 600, color: "var(--sl-ink)" }}>
+              {section.title}
+            </h2>
+            <div style={{ marginTop: "1rem", display: "grid", gap: "1rem" }}>
               {section.paragraphs.map((paragraph) => (
-                <p key={paragraph} className="text-sm leading-7 text-slate-600">
+                <p key={paragraph} style={{ fontSize: "0.95rem", lineHeight: 1.7, color: "var(--sl-muted)" }}>
                   {paragraph}
                 </p>
               ))}

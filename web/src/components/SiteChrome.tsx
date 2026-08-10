@@ -15,7 +15,6 @@ function isMainSite(pathname: string | null) {
   if (STANDALONE_PREFIXES.some((prefix) => pathname.startsWith(prefix))) {
     return false;
   }
-  if (pathname.startsWith("/legal")) return false;
   return true;
 }
 
