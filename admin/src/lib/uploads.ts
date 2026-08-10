@@ -7,8 +7,8 @@ const RASTER_EXTENSIONS = new Set([".jpg", ".jpeg", ".png", ".webp", ".gif"]);
 
 /** Longest edge for CMS uploads — matches hero/card image specs. */
 export const UPLOAD_MAX_EDGE = 1920;
-/** WebP quality for compressed uploads. */
-export const UPLOAD_WEBP_QUALITY = 78;
+/** Hard cap for every compressed CMS image. */
+export const UPLOAD_MAX_BYTES = 150 * 1024;
 
 export function getWebPublicDir() {
   const configured = process.env.WEB_PUBLIC_DIR?.trim();
@@ -37,9 +37,43 @@ export function sanitizeFileStem(name: string) {
   return stem || "image";
 }
 
+async function encodeWebpUnderCap(
+  input: Buffer,
+  maxBytes: number,
+): Promise<Buffer> {
+  let edge = UPLOAD_MAX_EDGE;
+  let best: Buffer | null = null;
+
+  for (let pass = 0; pass < 8; pass += 1) {
+    for (const quality of [72, 64, 56, 48, 40, 32, 24]) {
+      const buffer = await sharp(input, { animated: false, failOn: "none" })
+        .rotate()
+        .resize({
+          width: edge,
+          height: edge,
+          fit: "inside",
+          withoutEnlargement: true,
+        })
+        .webp({
+          quality,
+          effort: 5,
+          smartSubsample: true,
+        })
+        .toBuffer();
+
+      if (!best || buffer.length < best.length) best = buffer;
+      if (buffer.length <= maxBytes) return buffer;
+    }
+
+    edge = Math.max(640, Math.round(edge * 0.75));
+  }
+
+  return best ?? input;
+}
+
 /**
- * Compress raster uploads to WebP (max edge 1920). SVG is stored as-is.
- * Animated GIFs keep the original file when sharp can't safely convert them.
+ * Compress raster uploads to WebP at or under 150 KB.
+ * SVG is stored as-is. Animated GIFs keep the original when multi-frame.
  */
 export async function compressImageBuffer(
   input: Buffer,
@@ -56,31 +90,15 @@ export async function compressImageBuffer(
   }
 
   try {
-    const image = sharp(input, { animated: false, failOn: "none" }).rotate();
-    const meta = await image.metadata();
+    const meta = await sharp(input, { animated: false, failOn: "none" }).metadata();
 
-    // Keep tiny animated GIFs as-is when multi-page
     if (ext === ".gif" && (meta.pages ?? 1) > 1) {
       return { buffer: input, ext: ".gif" };
     }
 
-    const buffer = await image
-      .resize({
-        width: UPLOAD_MAX_EDGE,
-        height: UPLOAD_MAX_EDGE,
-        fit: "inside",
-        withoutEnlargement: true,
-      })
-      .webp({
-        quality: UPLOAD_WEBP_QUALITY,
-        effort: 4,
-        smartSubsample: true,
-      })
-      .toBuffer();
-
+    const buffer = await encodeWebpUnderCap(input, UPLOAD_MAX_BYTES);
     return { buffer, ext: ".webp" };
   } catch {
-    // Fall back to original bytes if decode fails
     return { buffer: input, ext };
   }
 }
@@ -111,7 +129,14 @@ export async function saveUploadedImage(
   const input = Buffer.from(await file.arrayBuffer());
   const compressed = await compressImageBuffer(input, ext);
 
-  // Unique filenames avoid browser/CDN cache serving an overwritten file.
+  if (
+    compressed.ext !== ".svg" &&
+    compressed.ext !== ".gif" &&
+    compressed.buffer.length > UPLOAD_MAX_BYTES
+  ) {
+    throw new Error("Could not compress image under 150 KB. Try a simpler photo.");
+  }
+
   const filename = `${stem}-${Date.now()}${compressed.ext}`;
   const targetPath = path.join(uploadDir, filename);
 

@@ -1,7 +1,5 @@
 /**
- * Recompress existing public/uploads images.
- * - jpg/jpeg/webp: overwrite in place (same URL)
- * - png: write sibling .webp, rewrite DB/settings paths, remove old png when safe
+ * Recompress existing public/uploads images to ≤150 KB WebP.
  *
  * Usage:
  *   node --env-file=.env scripts/compress-existing-uploads.mjs
@@ -15,12 +13,10 @@ import sharp from "sharp";
 
 const args = process.argv.slice(2);
 const dryRun = args.includes("--dry-run");
-const minBytes = Number(
-  args.find((a) => a.startsWith("--min-bytes="))?.split("=")[1] ?? 120_000,
+const maxBytes = Number(
+  args.find((a) => a.startsWith("--max-bytes="))?.split("=")[1] ?? 150 * 1024,
 );
-const maxEdge = 1920;
-const webpQuality = 78;
-const jpegQuality = 80;
+const maxEdgeStart = 1920;
 
 const scriptDir = path.dirname(fileURLToPath(import.meta.url));
 const publicDir = path.join(scriptDir, "../public");
@@ -43,6 +39,32 @@ async function walk(dir) {
 
 function toPublicUrl(absPath) {
   return `/${path.relative(publicDir, absPath).replaceAll("\\", "/")}`;
+}
+
+async function encodeWebpUnderCap(input) {
+  let edge = maxEdgeStart;
+  let best = null;
+
+  for (let pass = 0; pass < 8; pass += 1) {
+    for (const quality of [72, 64, 56, 48, 40, 32, 24]) {
+      const buffer = await sharp(input, { failOn: "none", animated: false })
+        .rotate()
+        .resize({
+          width: edge,
+          height: edge,
+          fit: "inside",
+          withoutEnlargement: true,
+        })
+        .webp({ quality, effort: 5, smartSubsample: true })
+        .toBuffer();
+
+      if (!best || buffer.length < best.length) best = buffer;
+      if (buffer.length <= maxBytes) return buffer;
+    }
+    edge = Math.max(640, Math.round(edge * 0.75));
+  }
+
+  return best;
 }
 
 async function replacePathEverywhere(fromUrl, toUrl) {
@@ -77,9 +99,10 @@ let compressed = 0;
 let savedBytes = 0;
 let pathRewrites = 0;
 let errors = 0;
+let stillOver = 0;
 
 console.log(
-  `Scanning ${uploadsRoot} (min ${minBytes} bytes)${dryRun ? " [dry-run]" : ""}…`,
+  `Scanning ${uploadsRoot} (cap ${maxBytes} bytes / ${(maxBytes / 1024).toFixed(0)} KB)${dryRun ? " [dry-run]" : ""}…`,
 );
 
 const files = await walk(uploadsRoot);
@@ -90,47 +113,36 @@ for (const filePath of files) {
 
   scanned += 1;
   const beforeStat = await fs.stat(filePath);
-  if (beforeStat.size < minBytes) {
+  if (beforeStat.size <= maxBytes && ext === ".webp") {
     skipped += 1;
     continue;
   }
 
   try {
     const input = await fs.readFile(filePath);
-    const pipeline = sharp(input, { failOn: "none", animated: false })
-      .rotate()
-      .resize({
-        width: maxEdge,
-        height: maxEdge,
-        fit: "inside",
-        withoutEnlargement: true,
-      });
-
-    const fromUrl = toPublicUrl(filePath);
-    let outPath = filePath;
-    let outUrl = fromUrl;
-    let output;
-
-    if (ext === ".png") {
-      output = await pipeline.webp({ quality: webpQuality, effort: 4 }).toBuffer();
-      outPath = filePath.replace(/\.png$/i, ".webp");
-      outUrl = toPublicUrl(outPath);
-    } else if (ext === ".webp") {
-      output = await pipeline.webp({ quality: webpQuality, effort: 4 }).toBuffer();
-    } else {
-      output = await pipeline.jpeg({ quality: jpegQuality, mozjpeg: true }).toBuffer();
+    const output = await encodeWebpUnderCap(input);
+    if (!output) {
+      errors += 1;
+      continue;
     }
 
-    if (output.length >= beforeStat.size * 0.97 && outPath === filePath) {
+    const fromUrl = toPublicUrl(filePath);
+    const outPath =
+      ext === ".webp" ? filePath : filePath.replace(/\.(png|jpe?g)$/i, ".webp");
+    const outUrl = toPublicUrl(outPath);
+
+    if (output.length >= beforeStat.size * 0.98 && outPath === filePath && beforeStat.size <= maxBytes) {
       skipped += 1;
       continue;
     }
 
     const delta = beforeStat.size - output.length;
     const rel = path.relative(uploadsRoot, filePath);
+    const over = output.length > maxBytes ? " OVER CAP" : "";
     console.log(
-      `  ${rel}: ${(beforeStat.size / 1024).toFixed(0)}KB → ${(output.length / 1024).toFixed(0)}KB (−${Math.max(0, (delta / beforeStat.size) * 100).toFixed(0)}%)${outPath !== filePath ? " → .webp" : ""}`,
+      `  ${rel}: ${(beforeStat.size / 1024).toFixed(0)}KB → ${(output.length / 1024).toFixed(0)}KB${over}`,
     );
+    if (output.length > maxBytes) stillOver += 1;
 
     if (!dryRun) {
       const tmp = `${outPath}.tmp`;
@@ -138,9 +150,7 @@ for (const filePath of files) {
       await fs.rename(tmp, outPath);
 
       if (outPath !== filePath) {
-        const rewritten = await replacePathEverywhere(fromUrl, outUrl);
-        pathRewrites += rewritten;
-        // Only delete original when a webp sibling exists
+        pathRewrites += await replacePathEverywhere(fromUrl, outUrl);
         await fs.unlink(filePath).catch(() => {});
       }
     }
@@ -157,6 +167,7 @@ console.log("");
 console.log(`Scanned: ${scanned}`);
 console.log(`Compressed: ${compressed}`);
 console.log(`Skipped: ${skipped}`);
+console.log(`Still over ${maxBytes}B: ${stillOver}`);
 console.log(`Path rewrites: ${pathRewrites}`);
 console.log(`Errors: ${errors}`);
 console.log(`Saved: ${(savedBytes / 1024 / 1024).toFixed(1)} MB${dryRun ? " (dry-run)" : ""}`);
