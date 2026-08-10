@@ -73,7 +73,7 @@ export function SeoPageForm({
 
   const imageUploadScope = useMemo(() => {
     if (publicPath) {
-      return `pages${publicPath}`;
+      return `pages/${publicPath}`;
     }
     return "pages/general";
   }, [publicPath]);

@@ -428,7 +428,15 @@ export async function saveSeoPage(formData: FormData) {
     await db.insert(seoPages).values(values);
   }
 
+  // Hub heroes also live on locations — keep Locations admin and resolveHubHeroImage aligned.
+  if (pageType === "city_hub") {
+    await db.update(locations).set({ heroImage }).where(eq(locations.id, cityId));
+  } else if (pageType === "metro_hub" && resolvedMetroId) {
+    await db.update(locations).set({ heroImage }).where(eq(locations.id, resolvedMetroId));
+  }
+
   revalidatePath("/dashboard/seo-pages");
+  revalidatePath("/dashboard/locations");
   redirect("/dashboard/seo-pages");
 }
 
@@ -511,6 +519,18 @@ export async function persistCityHubHero(cityId: string, heroImage: string | nul
 
   await db.update(locations).set({ heroImage: normalized }).where(eq(locations.id, cityId));
 
+  // Keep hub SEO page in sync — live site prefers seo_pages.hero_image when set.
+  await db
+    .update(seoPages)
+    .set({ heroImage: normalized, updatedAt: new Date() })
+    .where(
+      and(
+        eq(seoPages.cityId, cityId),
+        isNull(seoPages.metroId),
+        eq(seoPages.pageType, "city_hub"),
+      ),
+    );
+
   revalidatePath("/dashboard/locations");
   revalidatePath(`/dashboard/locations/${cityId}`);
   await revalidateLocationPaths(city.slug);
@@ -549,6 +569,18 @@ export async function persistMetroHubHero(
 
   await db.update(locations).set({ heroImage: normalized }).where(eq(locations.id, metroId));
 
+  // Keep metro hub SEO page in sync — live site prefers seo_pages.hero_image when set.
+  await db
+    .update(seoPages)
+    .set({ heroImage: normalized, updatedAt: new Date() })
+    .where(
+      and(
+        eq(seoPages.cityId, cityId),
+        eq(seoPages.metroId, metroId),
+        eq(seoPages.pageType, "metro_hub"),
+      ),
+    );
+
   revalidatePath(`/dashboard/locations/${cityId}`);
   revalidatePath(`/dashboard/locations/${cityId}/metros/${metroId}`);
   await revalidateLocationPaths(city.slug, metro.slug);
@@ -558,7 +590,6 @@ export async function persistMetroHubHero(
 
 export async function saveCityHubHero(formData: FormData) {
   await requireAdminSession();
-  const db = getDb();
 
   const cityId = String(formData.get("cityId") ?? "").trim();
   if (!cityId) throw new Error("City is required.");
@@ -567,20 +598,7 @@ export async function saveCityHubHero(formData: FormData) {
     String(formData.get("cityHeroImage") ?? ""),
     "City hero image",
   );
-  await db.update(locations).set({ heroImage: cityHeroImage }).where(eq(locations.id, cityId));
-
-  const [cityRecord] = await db
-    .select({ slug: locations.slug })
-    .from(locations)
-    .where(eq(locations.id, cityId))
-    .limit(1);
-
-  revalidatePath("/dashboard/locations");
-  revalidatePath(`/dashboard/locations/${cityId}`);
-  if (cityRecord?.slug) {
-    revalidatePath(`/locations/${cityRecord.slug}`);
-    revalidatePath("/locations");
-  }
+  await persistCityHubHero(cityId, cityHeroImage);
   redirect(`/dashboard/locations/${cityId}`);
 }
 
@@ -608,7 +626,6 @@ export async function saveCityServiceImages(formData: FormData) {
 
 export async function saveMetroHubHero(formData: FormData) {
   await requireAdminSession();
-  const db = getDb();
 
   const cityId = String(formData.get("cityId") ?? "").trim();
   const metroId = String(formData.get("metroId") ?? "").trim();
@@ -618,11 +635,9 @@ export async function saveMetroHubHero(formData: FormData) {
     String(formData.get("metroHeroImage") ?? ""),
     "Metro hero image",
   );
-  await db.update(locations).set({ heroImage: metroHeroImage }).where(eq(locations.id, metroId));
+  await persistMetroHubHero(cityId, metroId, metroHeroImage);
 
   const returnPath = String(formData.get("returnPath") ?? "").trim();
-  revalidatePath(`/dashboard/locations/${cityId}`);
-  revalidatePath(`/dashboard/locations/${cityId}/metros/${metroId}`);
   redirect(returnPath || `/dashboard/locations/${cityId}`);
 }
 

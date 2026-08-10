@@ -1,9 +1,9 @@
-import { and, eq } from "drizzle-orm";
+import { and, eq, isNull } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { NextResponse } from "next/server";
 import { requireAdminSession } from "@/lib/auth";
 import { getDb } from "@/lib/db";
-import { locations } from "@/lib/db/schema";
+import { locations, seoPages } from "@/lib/db/schema";
 import { assertInternalImageUrl } from "@/lib/image-url";
 
 export async function POST(request: Request) {
@@ -44,6 +44,18 @@ export async function POST(request: Request) {
 
       await db.update(locations).set({ heroImage }).where(eq(locations.id, metroId));
 
+      // Keep SEO hub page aligned with Locations admin.
+      await db
+        .update(seoPages)
+        .set({ heroImage, updatedAt: new Date() })
+        .where(
+          and(
+            eq(seoPages.cityId, cityId),
+            eq(seoPages.metroId, metroId),
+            eq(seoPages.pageType, "metro_hub"),
+          ),
+        );
+
       const [city] = await db
         .select({ slug: locations.slug })
         .from(locations)
@@ -66,6 +78,18 @@ export async function POST(request: Request) {
       }
 
       await db.update(locations).set({ heroImage }).where(eq(locations.id, cityId));
+
+      await db
+        .update(seoPages)
+        .set({ heroImage, updatedAt: new Date() })
+        .where(
+          and(
+            eq(seoPages.cityId, cityId),
+            isNull(seoPages.metroId),
+            eq(seoPages.pageType, "city_hub"),
+          ),
+        );
+
       revalidatePath(`/locations/${city.slug}`);
       revalidatePath("/locations");
     }
