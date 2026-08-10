@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { and, asc, count, desc, eq, isNotNull, isNull, sql, type SQL } from "drizzle-orm";
+import { and, asc, count, desc, eq, ilike, isNotNull, isNull, or, sql, type SQL } from "drizzle-orm";
 import { alias } from "drizzle-orm/pg-core";
 import { getDb } from "@/lib/db";
 import { locations, seoPages, seoServices } from "@/lib/db/schema";
@@ -31,6 +31,7 @@ type NavLevel = "states" | "cities" | "metros";
 
 type SeoPagesDashboardProps = {
   searchParams: Promise<{
+    q?: string;
     state?: string;
     city?: string;
     metro?: string;
@@ -66,6 +67,7 @@ export default async function SeoPagesDashboard({ searchParams }: SeoPagesDashbo
   const params = await searchParams;
   const db = getDb();
 
+  const searchQuery = params.q?.trim() || undefined;
   const stateFilter = params.state?.trim().toUpperCase() || undefined;
   const cityFilter = params.city?.trim() || undefined;
   const metroFilter = params.metro?.trim() || undefined;
@@ -84,6 +86,19 @@ export default async function SeoPagesDashboard({ searchParams }: SeoPagesDashbo
   // "Metros" nav is a flat metro-only list.
   if (navLevel === "metros") {
     filters.push(isNotNull(seoPages.metroId));
+  }
+  if (searchQuery) {
+    const pattern = `%${searchQuery}%`;
+    filters.push(
+      or(
+        ilike(seoPages.h1, pattern),
+        ilike(seoPages.path, pattern),
+        ilike(seoPages.metaTitle, pattern),
+        ilike(cityLoc.name, pattern),
+        ilike(metroLoc.name, pattern),
+        ilike(seoServices.name, pattern),
+      )!,
+    );
   }
   if (stateFilter) filters.push(eq(cityLoc.state, stateFilter));
   if (cityFilter) filters.push(eq(seoPages.cityId, cityFilter));
@@ -194,7 +209,12 @@ export default async function SeoPagesDashboard({ searchParams }: SeoPagesDashbo
   const hasLocationFilter = Boolean(stateFilter || cityFilter || metroFilter);
   const hasNavFilter = navLevel !== "states";
   const hasFilters = Boolean(
-    hasLocationFilter || serviceFilter || statusFilter || typeFilter || hasNavFilter,
+    searchQuery ||
+      hasLocationFilter ||
+      serviceFilter ||
+      statusFilter ||
+      typeFilter ||
+      hasNavFilter,
   );
 
   const statesInDb = [...new Set(cities.map((city) => city.state))].sort();
@@ -206,6 +226,7 @@ export default async function SeoPagesDashboard({ searchParams }: SeoPagesDashbo
       : metros;
 
   const currentFilters = {
+    q: searchQuery,
     state: activeState,
     city: cityFilter,
     metro: metroFilter,
@@ -224,6 +245,7 @@ export default async function SeoPagesDashboard({ searchParams }: SeoPagesDashbo
         : "All pages by state";
 
   const tabBase = {
+    q: searchQuery,
     service: serviceFilter,
     status: statusFilter,
     type: typeFilter,
@@ -282,6 +304,17 @@ export default async function SeoPagesDashboard({ searchParams }: SeoPagesDashbo
 
       <form className="admin-panel admin-filters" method="get">
         <input type="hidden" name="nav" value={navLevel} />
+        <div className="admin-field" style={{ gridColumn: "1 / -1", maxWidth: "28rem" }}>
+          <label htmlFor="q">Search by name</label>
+          <input
+            id="q"
+            name="q"
+            type="search"
+            placeholder="H1, path, city, metro, or service…"
+            defaultValue={searchQuery ?? ""}
+            autoComplete="off"
+          />
+        </div>
         <div className="admin-field">
           <label htmlFor="state">State</label>
           <select id="state" name="state" defaultValue={activeState ?? ""}>
@@ -415,6 +448,7 @@ export default async function SeoPagesDashboard({ searchParams }: SeoPagesDashbo
 
         <div className="admin-table-meta">
           Showing {filteredCount} of {total} pages — {navLabel}
+          {searchQuery ? ` · “${searchQuery}”` : ""}
           {hasFilters ? " (filtered)" : ""}
           <span className="admin-table-meta__hint">Use + to expand groups</span>
         </div>
