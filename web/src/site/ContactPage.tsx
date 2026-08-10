@@ -10,7 +10,7 @@ import { SiteNav } from "./SiteNav";
 export const metadata: Metadata = createPageMetadata({
   title: "Contact",
   description:
-    "Contact Servicelink for facilities management enquiries, quotes, and support across Sydney and NSW.",
+    "Contact Servicelink for facilities management enquiries, support, and general questions. We respond within one business day.",
   path: "/contact",
 });
 
@@ -42,7 +42,7 @@ export default async function ContactPage({ searchParams }: ContactPageProps) {
               <span>Contact</span>
             </nav>
 
-            <p className="m1-label">{referrer?.label ?? "Contact Servicelink"}</p>
+            <p className="m1-label">{referrer?.label ?? "Get in touch"}</p>
             <h1 className="m1-h1 m1-service-hero__title">
               {referrer ? (
                 <>
@@ -52,15 +52,15 @@ export default async function ContactPage({ searchParams }: ContactPageProps) {
                 </>
               ) : (
                 <>
-                  Let&apos;s talk about
+                  We&apos;re here to
                   <br />
-                  <em>your portfolio.</em>
+                  <em>help.</em>
                 </>
               )}
             </h1>
             <p className="m1-service-hero__summary">
               {referrer?.summary ??
-                "Tell us about your facilities and we'll schedule a tailored briefing within one business day — no generic proposals, just practical next steps from our Sydney team."}
+                "Questions, support, or general enquiries — send us a message and our team will get back to you within one business day."}
             </p>
 
             <div className="m1-service-hero__actions">
@@ -79,7 +79,7 @@ export default async function ContactPage({ searchParams }: ContactPageProps) {
               variant="hero"
               messagePlaceholder={
                 referrer?.messagePlaceholder ??
-                "Tell us about your facilities and requirements..."
+                "How can we help? Include any useful details so we can respond quickly..."
               }
               referrerLabel={referrer?.breadcrumbLabel}
             />
