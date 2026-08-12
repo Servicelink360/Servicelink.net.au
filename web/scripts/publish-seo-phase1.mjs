@@ -2,7 +2,9 @@
  * Phase 1 SEO publish set (~270 pages):
  * - 20 priority city hubs + city×service
  * - Sydney top 10 metro hubs + metro×service
- * Everything else: unpublished + noindex
+ *
+ * Additive only: never unpublish pages/locations outside this set, so admin
+ * one-click publishes (e.g. Manly) survive deploys.
  */
 import postgres from "postgres";
 import { SERVICE_DEFINITIONS } from "./lib/service-definitions.mjs";
@@ -92,15 +94,7 @@ const before = await sql`
 console.log("seo_pages before:", before[0]);
 
 if (!dryRun) {
-  // Unpublish everything first
-  await sql`
-    UPDATE seo_pages
-    SET published = false,
-        no_index = true,
-        updated_at = now()
-  `;
-
-  // Publish Phase 1 allowlist
+  // Additive publish only — never wipe admin-published pages on deploy.
   const published = await sql`
     UPDATE seo_pages
     SET published = true,
@@ -110,23 +104,10 @@ if (!dryRun) {
     RETURNING path
   `;
 
-  // Cities: only Phase 1 published on /locations index
-  await sql`
-    UPDATE locations
-    SET published = false
-    WHERE type = 'city'
-  `;
   await sql`
     UPDATE locations
     SET published = true
     WHERE type = 'city' AND slug = ANY(${PHASE1_CITIES})
-  `;
-
-  // Metros: Sydney top 10 + Phase 2 metros
-  await sql`
-    UPDATE locations
-    SET published = false
-    WHERE type = 'metro'
   `;
   await sql`
     UPDATE locations m
@@ -150,7 +131,6 @@ if (!dryRun) {
     `;
   }
 
-  // Re-apply Phase 2 pages (phase1 wipe would otherwise drop them)
   const phase2 = buildPhase2Allowlist();
   const phase2Published = await sql`
     UPDATE seo_pages
@@ -161,6 +141,27 @@ if (!dryRun) {
     RETURNING path
   `;
   console.log(`Phase 2 rows re-published: ${phase2Published.length}`);
+
+  // Align location flags with published hub pages (admin one-click publish).
+  await sql`
+    UPDATE locations m
+    SET published = true
+    FROM seo_pages sp
+    WHERE m.type = 'metro'
+      AND sp.metro_id = m.id
+      AND sp.page_type = 'metro_hub'
+      AND sp.published = true
+  `;
+  await sql`
+    UPDATE locations c
+    SET published = true
+    FROM seo_pages sp
+    WHERE c.type = 'city'
+      AND sp.city_id = c.id
+      AND sp.metro_id IS NULL
+      AND sp.page_type = 'city_hub'
+      AND sp.published = true
+  `;
 
   const after = await sql`
     SELECT

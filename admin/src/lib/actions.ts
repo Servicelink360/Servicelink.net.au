@@ -345,11 +345,29 @@ export async function setSeoLocationGroupPublished(ids: string[], published: boo
     })
     .where(inArray(seoPages.id, pages.map((page) => page.id)));
 
+  // Public city hubs only list metros when locations.published is true.
+  const metroIds = [
+    ...new Set(pages.map((page) => page.metroId).filter((id): id is string => Boolean(id))),
+  ];
+  const cityIds = [...new Set(pages.map((page) => page.cityId))];
+
+  if (metroIds.length) {
+    await db.update(locations).set({ published }).where(inArray(locations.id, metroIds));
+  }
+
+  // City-wide groups (hub + city services) toggle the city location flag.
+  const hasCityLevelPages = pages.some((page) => !page.metroId);
+  if (hasCityLevelPages) {
+    await db.update(locations).set({ published }).where(inArray(locations.id, cityIds));
+  } else if (published) {
+    // Publishing a metro must keep the parent city visible on /locations.
+    await db.update(locations).set({ published: true }).where(inArray(locations.id, cityIds));
+  }
+
   revalidatePath("/dashboard/seo-pages");
   revalidatePath("/locations");
   revalidatePath("/sitemap.xml");
 
-  const cityIds = [...new Set(pages.map((page) => page.cityId))];
   for (const cityId of cityIds) {
     const [city] = await db
       .select({ slug: locations.slug })
@@ -359,14 +377,9 @@ export async function setSeoLocationGroupPublished(ids: string[], published: boo
     if (!city) continue;
 
     revalidatePath(`/locations/${city.slug}`);
-    const metroIds = [
-      ...new Set(
-        pages
-          .filter((page) => page.cityId === cityId && page.metroId)
-          .map((page) => page.metroId as string),
-      ),
-    ];
-    for (const metroId of metroIds) {
+    for (const metroId of metroIds.filter((id) =>
+      pages.some((page) => page.cityId === cityId && page.metroId === id),
+    )) {
       const [metro] = await db
         .select({ slug: locations.slug })
         .from(locations)
