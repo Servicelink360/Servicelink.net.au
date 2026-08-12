@@ -37,7 +37,7 @@ export default async function EditLocationImagesPage({ params }: EditLocationIma
       })
       .from(locations)
       .where(and(eq(locations.parentId, id), eq(locations.type, "metro")))
-      .orderBy(asc(locations.sortOrder), asc(locations.name)),
+      .orderBy(asc(locations.name)),
     db
       .select({
         id: seoServices.id,
