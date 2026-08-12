@@ -3,7 +3,7 @@ import { and, asc, count, desc, eq, ilike, isNotNull, isNull, or, sql, type SQL 
 import { alias } from "drizzle-orm/pg-core";
 import { getDb } from "@/lib/db";
 import { locations, seoPages, seoServices } from "@/lib/db/schema";
-import { deleteSeoPage } from "@/lib/actions";
+import { deleteSeoPage, setSeoLocationGroupPublished } from "@/lib/actions";
 import { SeoPagesTable } from "./SeoPagesTable";
 
 const cityLoc = alias(locations, "city_loc");
@@ -452,7 +452,11 @@ export default async function SeoPagesDashboard({ searchParams }: SeoPagesDashbo
           {hasFilters ? " (filtered)" : ""}
           <span className="admin-table-meta__hint">Use + to expand groups</span>
         </div>
-        <SeoPagesTable rows={tableRows} deleteSeoPage={deleteSeoPage} />
+        <SeoPagesTable
+          rows={tableRows}
+          deleteSeoPage={deleteSeoPage}
+          setSeoLocationGroupPublished={setSeoLocationGroupPublished}
+        />
       </div>
     </>
   );

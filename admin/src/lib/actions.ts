@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import { and, eq, isNull, ne } from "drizzle-orm";
+import { and, eq, inArray, isNull, ne } from "drizzle-orm";
 import { getDb } from "@/lib/db";
 import {
   contactMessages,
@@ -307,6 +307,78 @@ export async function deleteSeoPage(id: string) {
   await requireAdminSession();
   await getDb().delete(seoPages).where(eq(seoPages.id, id));
   revalidatePath("/dashboard/seo-pages");
+}
+
+/**
+ * Publish or unpublish a location group (hub + all service pages) in one action.
+ * Publishing also clears no_index so pages can appear in Google.
+ */
+export async function setSeoLocationGroupPublished(ids: string[], published: boolean) {
+  await requireAdminSession();
+
+  const uniqueIds = [...new Set(ids.map((id) => id.trim()).filter(Boolean))];
+  if (uniqueIds.length === 0) {
+    throw new Error("No pages selected.");
+  }
+
+  const db = getDb();
+  const pages = await db
+    .select({
+      id: seoPages.id,
+      path: seoPages.path,
+      cityId: seoPages.cityId,
+      metroId: seoPages.metroId,
+    })
+    .from(seoPages)
+    .where(inArray(seoPages.id, uniqueIds));
+
+  if (pages.length === 0) {
+    throw new Error("No matching SEO pages found.");
+  }
+
+  await db
+    .update(seoPages)
+    .set({
+      published,
+      noIndex: !published,
+      updatedAt: new Date(),
+    })
+    .where(inArray(seoPages.id, pages.map((page) => page.id)));
+
+  revalidatePath("/dashboard/seo-pages");
+  revalidatePath("/locations");
+  revalidatePath("/sitemap.xml");
+
+  const cityIds = [...new Set(pages.map((page) => page.cityId))];
+  for (const cityId of cityIds) {
+    const [city] = await db
+      .select({ slug: locations.slug })
+      .from(locations)
+      .where(eq(locations.id, cityId))
+      .limit(1);
+    if (!city) continue;
+
+    revalidatePath(`/locations/${city.slug}`);
+    const metroIds = [
+      ...new Set(
+        pages
+          .filter((page) => page.cityId === cityId && page.metroId)
+          .map((page) => page.metroId as string),
+      ),
+    ];
+    for (const metroId of metroIds) {
+      const [metro] = await db
+        .select({ slug: locations.slug })
+        .from(locations)
+        .where(eq(locations.id, metroId))
+        .limit(1);
+      if (metro) {
+        revalidatePath(`/locations/${city.slug}/${metro.slug}`);
+      }
+    }
+  }
+
+  return { ok: true as const, count: pages.length, published };
 }
 
 export async function saveSeoPage(formData: FormData) {

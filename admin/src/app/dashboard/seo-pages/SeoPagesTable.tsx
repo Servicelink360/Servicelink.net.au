@@ -1,15 +1,23 @@
 "use client";
 
 import Link from "next/link";
-import { useMemo, useState, useTransition } from "react";
+import { useRouter } from "next/navigation";
+import { useMemo, useState, useTransition, type ReactNode } from "react";
 import { ConfirmDialog } from "@/components/ConfirmDialog";
 import { DeleteIcon, EditIcon, ViewIcon } from "@/components/AdminActionIcons";
 import { buildSeoPageTree, type SeoPageRow, type StateNode } from "@/lib/seo-page-tree";
 import { publicLocationPageUrl } from "@/lib/site-url";
 
+type SetGroupPublished = (ids: string[], published: boolean) => Promise<{
+  ok: true;
+  count: number;
+  published: boolean;
+}>;
+
 type SeoPagesTableProps = {
   rows: SeoPageRow[];
   deleteSeoPage: (id: string) => Promise<void>;
+  setSeoLocationGroupPublished: SetGroupPublished;
 };
 
 type CityNode = ReturnType<typeof buildSeoPageTree>[number]["cities"][number];
@@ -93,19 +101,106 @@ function metroServiceSummary(pages: SeoPageRow[]) {
   return names.length ? names.join(", ") : undefined;
 }
 
-function TreeRowTail({ service }: { service?: string }) {
+function TreeRowTail({
+  service,
+  actions,
+}: {
+  service?: string;
+  actions?: ReactNode;
+}) {
   return (
     <>
       <td className="admin-table__group-blank">{service ?? null}</td>
       <td className="admin-table__group-blank" />
       <td className="admin-table__group-blank" />
       <td className="admin-table__group-blank" />
-      <td className="admin-table__group-blank" />
+      <td className="admin-table__group-blank">{actions ?? null}</td>
     </>
   );
 }
 
-export function SeoPagesTable({ rows, deleteSeoPage }: SeoPagesTableProps) {
+function LocationGroupPublishButton({
+  label,
+  pages,
+  setSeoLocationGroupPublished,
+}: {
+  label: string;
+  pages: SeoPageRow[];
+  setSeoLocationGroupPublished: SetGroupPublished;
+}) {
+  const router = useRouter();
+  const [mode, setMode] = useState<"publish" | "unpublish" | null>(null);
+  const [pending, startTransition] = useTransition();
+  const ids = pages.map((page) => page.id);
+  const allLive = pages.length > 0 && pages.every((page) => page.published);
+  const noneLive = pages.every((page) => !page.published);
+
+  function handleConfirm() {
+    if (!mode) return;
+    startTransition(() => {
+      void setSeoLocationGroupPublished(ids, mode === "publish").then(() => {
+        setMode(null);
+        router.refresh();
+      });
+    });
+  }
+
+  return (
+    <>
+      <div className="admin-actions">
+        {!allLive ? (
+          <button
+            type="button"
+            className="admin-btn admin-btn--small"
+            disabled={pending || ids.length === 0}
+            onClick={() => setMode("publish")}
+            title={`Publish hub + all services for ${label}`}
+          >
+            Publish all
+          </button>
+        ) : null}
+        {!noneLive ? (
+          <button
+            type="button"
+            className="admin-btn admin-btn--small admin-btn--ghost"
+            disabled={pending || ids.length === 0}
+            onClick={() => setMode("unpublish")}
+            title={`Unpublish hub + all services for ${label}`}
+          >
+            Unpublish all
+          </button>
+        ) : null}
+      </div>
+
+      <ConfirmDialog
+        open={mode === "publish"}
+        title={`Publish ${label}`}
+        description={`Publish all ${ids.length} pages for ${label} (hub + services) and allow indexing.`}
+        confirmLabel={pending ? "Publishing…" : `Publish ${ids.length} pages`}
+        cancelLabel="Cancel"
+        pending={pending}
+        onConfirm={handleConfirm}
+        onCancel={() => setMode(null)}
+      />
+      <ConfirmDialog
+        open={mode === "unpublish"}
+        title={`Unpublish ${label}`}
+        description={`Unpublish all ${ids.length} pages for ${label} and set them to no-index.`}
+        confirmLabel={pending ? "Unpublishing…" : `Unpublish ${ids.length} pages`}
+        cancelLabel="Cancel"
+        pending={pending}
+        onConfirm={handleConfirm}
+        onCancel={() => setMode(null)}
+      />
+    </>
+  );
+}
+
+export function SeoPagesTable({
+  rows,
+  deleteSeoPage,
+  setSeoLocationGroupPublished,
+}: SeoPagesTableProps) {
   const tree = useMemo(() => buildSeoPageTree(rows), [rows]);
   const [expanded, setExpanded] = useState<Set<string>>(() => new Set());
 
@@ -143,6 +238,7 @@ export function SeoPagesTable({ rows, deleteSeoPage }: SeoPagesTableProps) {
               expanded={expanded}
               toggle={toggle}
               deleteSeoPage={deleteSeoPage}
+              setSeoLocationGroupPublished={setSeoLocationGroupPublished}
             />
           ))}
         </tbody>
@@ -156,11 +252,13 @@ function StateBlock({
   expanded,
   toggle,
   deleteSeoPage,
+  setSeoLocationGroupPublished,
 }: {
   state: StateNode;
   expanded: Set<string>;
   toggle: (key: string) => void;
   deleteSeoPage: (id: string) => Promise<void>;
+  setSeoLocationGroupPublished: SetGroupPublished;
 }) {
   const citiesOpen = expanded.has(citiesPanelKey(state.key));
   const metrosOpen = expanded.has(metrosPanelKey(state.key));
@@ -215,6 +313,7 @@ function StateBlock({
               cityOpen={expanded.has(city.key)}
               toggle={toggle}
               deleteSeoPage={deleteSeoPage}
+              setSeoLocationGroupPublished={setSeoLocationGroupPublished}
             />
           ))
         : null}
@@ -228,6 +327,7 @@ function StateBlock({
               isCityLevel={metro.isCityLevel}
               toggle={toggle}
               deleteSeoPage={deleteSeoPage}
+              setSeoLocationGroupPublished={setSeoLocationGroupPublished}
               depth={1}
               cityName={metro.cityName}
               subtitle={metro.isCityLevel ? undefined : metro.cityName}
@@ -244,12 +344,14 @@ function CityBlock({
   cityOpen,
   toggle,
   deleteSeoPage,
+  setSeoLocationGroupPublished,
 }: {
   city: CityNode;
   expanded: Set<string>;
   cityOpen: boolean;
   toggle: (key: string) => void;
   deleteSeoPage: (id: string) => Promise<void>;
+  setSeoLocationGroupPublished: SetGroupPublished;
 }) {
   return (
     <>
@@ -287,6 +389,7 @@ function CityBlock({
                 isCityLevel={isCityLevel}
                 toggle={toggle}
                 deleteSeoPage={deleteSeoPage}
+                setSeoLocationGroupPublished={setSeoLocationGroupPublished}
                 depth={2}
                 cityName={city.cityName}
               />
@@ -303,6 +406,7 @@ function MetroBlock({
   isCityLevel,
   toggle,
   deleteSeoPage,
+  setSeoLocationGroupPublished,
   depth,
   cityName,
   subtitle,
@@ -312,6 +416,7 @@ function MetroBlock({
   isCityLevel: boolean;
   toggle: (key: string) => void;
   deleteSeoPage: (id: string) => Promise<void>;
+  setSeoLocationGroupPublished: SetGroupPublished;
   depth: number;
   cityName: string;
   subtitle?: string;
@@ -337,9 +442,20 @@ function MetroBlock({
             <span className="admin-tree-count">{metro.pages.length} pages</span>
           </div>
         </td>
-        <TreeRowTail service={metroServiceSummary(metro.pages)} />
+        <TreeRowTail
+          service={metroServiceSummary(metro.pages)}
+          actions={
+            <LocationGroupPublishButton
+              label={name}
+              pages={metro.pages}
+              setSeoLocationGroupPublished={setSeoLocationGroupPublished}
+            />
+          }
+        />
       </tr>
-      {metroOpen ? <PageRows pages={metro.pages} deleteSeoPage={deleteSeoPage} depth={pageDepth} /> : null}
+      {metroOpen ? (
+        <PageRows pages={metro.pages} deleteSeoPage={deleteSeoPage} depth={pageDepth} />
+      ) : null}
     </>
   );
 }
