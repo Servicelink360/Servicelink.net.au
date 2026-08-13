@@ -1,8 +1,9 @@
 import { eq } from "drizzle-orm";
 import { getDb } from "@/lib/db";
 import { statsExcludeIps } from "@/lib/db/schema";
+import { STATS_EXCLUDE_COOKIE } from "@/lib/stats-exclude-client";
 
-export const STATS_EXCLUDE_COOKIE = "sl_no_stats";
+export { STATS_EXCLUDE_COOKIE };
 
 export function clientIpFromRequest(request: Request) {
   const forwarded = request.headers.get("x-forwarded-for") ?? "";
@@ -29,12 +30,3 @@ export async function isExcludedStatsIp(ip: string) {
   return Boolean(row);
 }
 
-export function shouldSkipStatsClient() {
-  if (typeof window === "undefined") return false;
-  try {
-    if (localStorage.getItem(STATS_EXCLUDE_COOKIE) === "1") return true;
-  } catch {
-    // Ignore blocked storage.
-  }
-  return document.cookie.split(";").some((part) => part.trim() === `${STATS_EXCLUDE_COOKIE}=1`);
-}

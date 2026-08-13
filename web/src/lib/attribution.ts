@@ -1,4 +1,4 @@
-import { shouldSkipStatsClient } from "@/lib/stats-exclude";
+import { shouldSkipStatsClient } from "@/lib/stats-exclude-client";
 
 export type AttributionPayload = {
   pagePath: string;
