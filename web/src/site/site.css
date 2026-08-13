@@ -533,9 +533,12 @@ html:has(.m1) {
   padding: 0.4rem 0.8rem;
   border: 1px solid var(--m1-line);
   border-radius: 999px;
+  background: transparent;
+  font: inherit;
   font-size: 0.8125rem;
   font-weight: 600;
   color: var(--m1-muted);
+  cursor: pointer;
 }
 
 .m1-location-state--active,
@@ -556,10 +559,16 @@ html:has(.m1) {
   margin-bottom: 0.75rem;
 }
 
-.m1-location-group__head a {
+.m1-location-group__head a,
+.m1-location-group__all {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  font: inherit;
   font-size: 0.875rem;
   font-weight: 600;
   color: var(--m1-muted);
+  cursor: pointer;
 }
 
 .m1-h3 {
