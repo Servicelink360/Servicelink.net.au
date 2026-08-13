@@ -152,3 +152,59 @@ export function getAttribution(): AttributionPayload {
     return empty;
   }
 }
+
+const SESSION_KEY = "sl_visit_sid";
+const LAST_VISIT_KEY = "sl_last_visit";
+
+export function getVisitSessionId() {
+  if (typeof window === "undefined") return "";
+  try {
+    const existing = sessionStorage.getItem(SESSION_KEY);
+    if (existing) return existing;
+    const id = crypto.randomUUID();
+    sessionStorage.setItem(SESSION_KEY, id);
+    return id;
+  } catch {
+    return "";
+  }
+}
+
+export function trackPageView() {
+  if (typeof window === "undefined") return;
+  captureAttribution();
+  const attribution = getAttribution();
+  const sessionId = getVisitSessionId();
+  if (!sessionId || !attribution.pagePath.startsWith("/")) return;
+
+  const stamp = `${attribution.pagePath}|${Math.floor(Date.now() / 4000)}`;
+  try {
+    if (sessionStorage.getItem(LAST_VISIT_KEY) === stamp) return;
+    sessionStorage.setItem(LAST_VISIT_KEY, stamp);
+  } catch {
+    // Continue even if storage is blocked.
+  }
+
+  const payload = JSON.stringify({
+    sessionId,
+    ...attribution,
+  });
+
+  try {
+    if (navigator.sendBeacon) {
+      navigator.sendBeacon(
+        "/api/visit",
+        new Blob([payload], { type: "application/json" }),
+      );
+      return;
+    }
+  } catch {
+    // Fall through to fetch.
+  }
+
+  void fetch("/api/visit", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: payload,
+    keepalive: true,
+  }).catch(() => undefined);
+}

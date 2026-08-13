@@ -91,6 +91,22 @@ await sql`
 `;
 
 await sql`
+  CREATE TABLE IF NOT EXISTS site_visits (
+    id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+    session_id varchar(64) NOT NULL,
+    path varchar(512) NOT NULL,
+    landing_path varchar(512),
+    search_engine varchar(64),
+    traffic_referrer varchar(512),
+    created_at timestamptz NOT NULL DEFAULT now()
+  )
+`;
+
+await sql`CREATE INDEX IF NOT EXISTS site_visits_created_at_idx ON site_visits (created_at)`;
+await sql`CREATE INDEX IF NOT EXISTS site_visits_session_id_idx ON site_visits (session_id)`;
+await sql`CREATE INDEX IF NOT EXISTS site_visits_path_idx ON site_visits (path)`;
+
+await sql`
   INSERT INTO news_posts (
     title, slug, summary, body, meta_title, meta_description,
     featured_image, published, published_at

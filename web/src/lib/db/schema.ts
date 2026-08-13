@@ -157,6 +157,16 @@ export const sitePages = pgTable("site_pages", {
   createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
 });
 
+export const siteVisits = pgTable("site_visits", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  sessionId: varchar("session_id", { length: 64 }).notNull(),
+  path: varchar("path", { length: 512 }).notNull(),
+  landingPath: varchar("landing_path", { length: 512 }),
+  searchEngine: varchar("search_engine", { length: 64 }),
+  trafficReferrer: varchar("traffic_referrer", { length: 512 }),
+  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+});
+
 export type User = typeof users.$inferSelect;
 export type Subscriber = typeof subscribers.$inferSelect;
 export type ContactMessage = typeof contactMessages.$inferSelect;

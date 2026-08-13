@@ -2,14 +2,14 @@
 
 import { useEffect } from "react";
 import { usePathname, useSearchParams } from "next/navigation";
-import { captureAttribution } from "@/lib/attribution";
+import { trackPageView } from "@/lib/attribution";
 
 export function CaptureAttribution() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
   useEffect(() => {
-    captureAttribution();
+    trackPageView();
   }, [pathname, searchParams]);
 
   return null;

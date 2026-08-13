@@ -105,6 +105,107 @@ select {
   font-size: 0.875rem;
 }
 
+a.admin-card:hover {
+  border-color: #94a3b8;
+}
+
+.admin-stat-empty {
+  margin: 0;
+  color: #64748b;
+  font-size: 0.875rem;
+}
+
+.admin-stat-bars {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.admin-stat-bar {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(80px, 1fr) auto;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.admin-stat-bar__label {
+  font-size: 0.8125rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.admin-stat-bar__label a {
+  color: #1d4ed8;
+}
+
+.admin-stat-bar__track {
+  height: 8px;
+  background: #e2e8f0;
+  border-radius: 99px;
+  overflow: hidden;
+}
+
+.admin-stat-bar__fill {
+  height: 100%;
+  background: #0f172a;
+  border-radius: 99px;
+}
+
+.admin-stat-bar__value {
+  font-size: 0.8125rem;
+  font-variant-numeric: tabular-nums;
+  color: #334155;
+}
+
+.admin-stat-days {
+  display: flex;
+  align-items: flex-end;
+  gap: 0.5rem;
+  overflow-x: auto;
+  min-height: 160px;
+  padding-top: 0.5rem;
+}
+
+.admin-stat-day {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  min-width: 2rem;
+  color: #64748b;
+  font-size: 0.6875rem;
+}
+
+.admin-stat-day__bar {
+  width: 1.25rem;
+  background: #0f172a;
+  border-radius: 0.35rem 0.35rem 0 0;
+}
+
+.admin-stat-day small {
+  font-variant-numeric: tabular-nums;
+}
+
+.admin-stat-section {
+  padding: 1.25rem 1.25rem 0.75rem;
+}
+
+.admin-stat-section h2 {
+  margin: 0;
+}
+
+.admin-stat-section p {
+  margin: 0.35rem 0 0;
+  color: #64748b;
+  font-size: 0.875rem;
+}
+
+.admin-engine-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
 .admin-panel {
   background: #fff;
   border: 1px solid #e2e8f0;
@@ -130,6 +231,10 @@ select {
   background: #f8fafc;
   color: #475569;
   font-weight: 600;
+}
+
+.admin-table a {
+  color: #1d4ed8;
 }
 
 .admin-btn {

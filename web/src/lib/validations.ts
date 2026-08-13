@@ -10,6 +10,14 @@ export const attributionSchema = z.object({
   searchEngine: z.string().trim().max(64).optional(),
 });
 
+export const visitSchema = z.object({
+  sessionId: z.string().trim().uuid(),
+  pagePath: z.string().trim().min(1).max(512),
+  landingPath: z.string().trim().max(512).optional(),
+  trafficReferrer: z.string().trim().max(512).optional(),
+  searchEngine: z.string().trim().max(64).optional(),
+});
+
 export const contactSchema = z.object({
   name,
   email,

@@ -5,6 +5,7 @@ import { clearAdminSession } from "@/lib/auth";
 
 const NAV = [
   { href: "/dashboard", label: "Overview" },
+  { href: "/dashboard/statistics", label: "Statistics" },
   { href: "/dashboard/users", label: "Users" },
   { href: "/dashboard/subscribers", label: "Subscribers" },
   { href: "/dashboard/messages", label: "Messages" },
