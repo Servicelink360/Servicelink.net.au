@@ -38,6 +38,10 @@ export async function POST(request: Request) {
     message,
     source,
     locationPage,
+    pagePath,
+    landingPath,
+    trafficReferrer,
+    searchEngine,
   } = parsed.data;
 
   const details = [
@@ -62,6 +66,10 @@ export async function POST(request: Request) {
     portfolioSize: portfolioSize || null,
     message: details,
     source: source ?? "quote",
+    pagePath: pagePath || locationPage || null,
+    landingPath: landingPath || null,
+    trafficReferrer: trafficReferrer || null,
+    searchEngine: searchEngine || null,
   });
 
   console.info("[quote] saved", {
@@ -84,6 +92,10 @@ export async function POST(request: Request) {
       Timeframe: timeframe,
       Portfolio: portfolioSize,
       Source: source ?? "quote",
+      Page: pagePath || locationPage,
+      "Landed on": landingPath,
+      "Search engine": searchEngine,
+      Referrer: trafficReferrer,
     },
   });
 

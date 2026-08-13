@@ -26,8 +26,20 @@ export async function POST(request: Request) {
     return validationErrorResponse(parsed.error);
   }
 
-  const { name, email, phone, company, subject, message, source, referrer } =
-    parsed.data;
+  const {
+    name,
+    email,
+    phone,
+    company,
+    subject,
+    message,
+    source,
+    referrer,
+    pagePath,
+    landingPath,
+    trafficReferrer,
+    searchEngine,
+  } = parsed.data;
 
   const fullMessage = referrer
     ? `Referred from: ${referrer}\n\n${message}`
@@ -44,6 +56,10 @@ export async function POST(request: Request) {
     portfolioSize: subject.slice(0, 32),
     message: fullMessage,
     source: source ?? "website",
+    pagePath: pagePath || null,
+    landingPath: landingPath || null,
+    trafficReferrer: trafficReferrer || null,
+    searchEngine: searchEngine || null,
   });
 
   console.info("[contact] saved", {
@@ -63,6 +79,10 @@ export async function POST(request: Request) {
     extra: {
       Subject: subject,
       Source: source ?? "website",
+      Page: pagePath,
+      "Landed on": landingPath,
+      "Search engine": searchEngine,
+      Referrer: trafficReferrer,
     },
   });
 

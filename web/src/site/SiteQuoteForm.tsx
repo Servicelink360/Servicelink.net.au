@@ -1,6 +1,7 @@
 "use client";
 
 import { FormEvent, useState } from "react";
+import { getAttribution } from "@/lib/attribution";
 
 type ServiceOption = {
   slug: string;
@@ -59,6 +60,7 @@ export function SiteQuoteForm({
           message: String(formData.get("message") ?? ""),
           locationPage: locationPath || undefined,
           source,
+          ...getAttribution(),
         }),
       });
 

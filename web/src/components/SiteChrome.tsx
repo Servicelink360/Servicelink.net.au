@@ -1,6 +1,8 @@
 "use client";
 
+import { Suspense } from "react";
 import { usePathname } from "next/navigation";
+import { CaptureAttribution } from "./CaptureAttribution";
 import { Footer } from "./Footer";
 import { Header } from "./Header";
 
@@ -21,12 +23,24 @@ function isMainSite(pathname: string | null) {
 export function SiteChrome({ children }: SiteChromeProps) {
   const pathname = usePathname();
 
+  const tracker = (
+    <Suspense fallback={null}>
+      <CaptureAttribution />
+    </Suspense>
+  );
+
   if (isMainSite(pathname)) {
-    return <>{children}</>;
+    return (
+      <>
+        {tracker}
+        {children}
+      </>
+    );
   }
 
   return (
     <>
+      {tracker}
       <Header />
       <main className="flex-1">{children}</main>
       <Footer />

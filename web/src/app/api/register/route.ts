@@ -26,7 +26,17 @@ export async function POST(request: Request) {
     return validationErrorResponse(parsed.error);
   }
 
-  const { name, email, password, subscribeToUpdates, source } = parsed.data;
+  const {
+    name,
+    email,
+    password,
+    subscribeToUpdates,
+    source,
+    pagePath,
+    landingPath,
+    trafficReferrer,
+    searchEngine,
+  } = parsed.data;
   const db = getDb();
 
   const [existingUser] = await db
@@ -50,6 +60,10 @@ export async function POST(request: Request) {
       name,
       email,
       passwordHash,
+      pagePath: pagePath || null,
+      landingPath: landingPath || null,
+      trafficReferrer: trafficReferrer || null,
+      searchEngine: searchEngine || null,
     })
     .returning({ id: users.id, name: users.name, email: users.email });
 
@@ -63,7 +77,15 @@ export async function POST(request: Request) {
     if (existingSubscriber) {
       await db
         .update(subscribers)
-        .set({ active: true, userId: user.id, name })
+        .set({
+          active: true,
+          userId: user.id,
+          name,
+          pagePath: pagePath || null,
+          landingPath: landingPath || null,
+          trafficReferrer: trafficReferrer || null,
+          searchEngine: searchEngine || null,
+        })
         .where(eq(subscribers.email, email));
     } else {
       await db.insert(subscribers).values({
@@ -71,6 +93,10 @@ export async function POST(request: Request) {
         name,
         userId: user.id,
         source: source ?? "register",
+        pagePath: pagePath || null,
+        landingPath: landingPath || null,
+        trafficReferrer: trafficReferrer || null,
+        searchEngine: searchEngine || null,
       });
     }
   }

@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { FormEvent, useState } from "react";
+import { getAttribution } from "@/lib/attribution";
 
 type FormState = "idle" | "submitting" | "success" | "error";
 
@@ -27,6 +28,7 @@ export function JoinForm() {
           password: String(formData.get("password") ?? ""),
           subscribeToUpdates: formData.get("updates") === "on",
           source: "join-page",
+          ...getAttribution(),
         }),
       });
 

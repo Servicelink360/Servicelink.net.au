@@ -1,6 +1,7 @@
 "use client";
 
 import { FormEvent, useState } from "react";
+import { getAttribution } from "@/lib/attribution";
 
 type FormState = "idle" | "submitting" | "success" | "error";
 
@@ -52,6 +53,7 @@ export function SiteContactForm({
           message: String(formData.get("message") ?? ""),
           referrer: referrerLabel,
           source,
+          ...getAttribution(),
         }),
       });
 

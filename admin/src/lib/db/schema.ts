@@ -23,6 +23,10 @@ export const users = pgTable("users", {
   email: varchar("email", { length: 255 }).notNull().unique(),
   passwordHash: varchar("password_hash", { length: 255 }).notNull(),
   name: varchar("name", { length: 255 }).notNull(),
+  pagePath: varchar("page_path", { length: 512 }),
+  landingPath: varchar("landing_path", { length: 512 }),
+  trafficReferrer: varchar("traffic_referrer", { length: 512 }),
+  searchEngine: varchar("search_engine", { length: 64 }),
   createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
   updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow().notNull(),
 });
@@ -33,6 +37,10 @@ export const subscribers = pgTable("subscribers", {
   name: varchar("name", { length: 255 }),
   userId: uuid("user_id").references(() => users.id, { onDelete: "set null" }),
   source: varchar("source", { length: 64 }).notNull().default("website"),
+  pagePath: varchar("page_path", { length: 512 }),
+  landingPath: varchar("landing_path", { length: 512 }),
+  trafficReferrer: varchar("traffic_referrer", { length: 512 }),
+  searchEngine: varchar("search_engine", { length: 64 }),
   active: boolean("active").notNull().default(true),
   subscribedAt: timestamp("subscribed_at", { withTimezone: true }).defaultNow().notNull(),
 });
@@ -46,6 +54,10 @@ export const contactMessages = pgTable("contact_messages", {
   portfolioSize: varchar("portfolio_size", { length: 32 }),
   message: text("message").notNull(),
   source: varchar("source", { length: 64 }).notNull().default("website"),
+  pagePath: varchar("page_path", { length: 512 }),
+  landingPath: varchar("landing_path", { length: 512 }),
+  trafficReferrer: varchar("traffic_referrer", { length: 512 }),
+  searchEngine: varchar("search_engine", { length: 64 }),
   createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
 });
 

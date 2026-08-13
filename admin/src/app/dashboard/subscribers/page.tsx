@@ -1,4 +1,5 @@
 import { desc } from "drizzle-orm";
+import { AttributionDetails } from "@/components/AttributionDetails";
 import { getDb } from "@/lib/db";
 import { subscribers } from "@/lib/db/schema";
 import { deleteSubscriber, toggleSubscriber } from "@/lib/actions";
@@ -18,7 +19,7 @@ export default async function SubscribersPage() {
             <tr>
               <th>Email</th>
               <th>Name</th>
-              <th>Source</th>
+              <th>Came from</th>
               <th>Status</th>
               <th>Subscribed</th>
               <th />
@@ -34,7 +35,15 @@ export default async function SubscribersPage() {
                 <tr key={row.id}>
                   <td>{row.email}</td>
                   <td>{row.name ?? "—"}</td>
-                  <td>{row.source}</td>
+                  <td>
+                    <AttributionDetails
+                      source={row.source}
+                      pagePath={row.pagePath}
+                      landingPath={row.landingPath}
+                      searchEngine={row.searchEngine}
+                      trafficReferrer={row.trafficReferrer}
+                    />
+                  </td>
                   <td>
                     <span className={`admin-badge ${row.active ? "admin-badge--live" : ""}`}>
                       {row.active ? "Active" : "Inactive"}

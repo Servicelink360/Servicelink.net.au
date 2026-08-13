@@ -1,6 +1,7 @@
 "use client";
 
 import { FormEvent, useState } from "react";
+import { getAttribution } from "@/lib/attribution";
 
 type FormState = "idle" | "submitting" | "success" | "error";
 
@@ -26,6 +27,7 @@ export function AtlasContactForm() {
           phone: String(formData.get("phone") ?? ""),
           message: String(formData.get("message") ?? ""),
           source: "atlas",
+          ...getAttribution(),
         }),
       });
 

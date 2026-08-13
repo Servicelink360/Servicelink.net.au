@@ -67,6 +67,30 @@ await sql`
 `;
 
 await sql`
+  ALTER TABLE contact_messages
+  ADD COLUMN IF NOT EXISTS page_path varchar(512),
+  ADD COLUMN IF NOT EXISTS landing_path varchar(512),
+  ADD COLUMN IF NOT EXISTS traffic_referrer varchar(512),
+  ADD COLUMN IF NOT EXISTS search_engine varchar(64)
+`;
+
+await sql`
+  ALTER TABLE subscribers
+  ADD COLUMN IF NOT EXISTS page_path varchar(512),
+  ADD COLUMN IF NOT EXISTS landing_path varchar(512),
+  ADD COLUMN IF NOT EXISTS traffic_referrer varchar(512),
+  ADD COLUMN IF NOT EXISTS search_engine varchar(64)
+`;
+
+await sql`
+  ALTER TABLE users
+  ADD COLUMN IF NOT EXISTS page_path varchar(512),
+  ADD COLUMN IF NOT EXISTS landing_path varchar(512),
+  ADD COLUMN IF NOT EXISTS traffic_referrer varchar(512),
+  ADD COLUMN IF NOT EXISTS search_engine varchar(64)
+`;
+
+await sql`
   INSERT INTO news_posts (
     title, slug, summary, body, meta_title, meta_description,
     featured_image, published, published_at

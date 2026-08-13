@@ -1,6 +1,7 @@
 "use client";
 
 import { FormEvent, useState } from "react";
+import { getAttribution } from "@/lib/attribution";
 
 type FormState = "idle" | "submitting" | "success" | "error";
 
@@ -31,6 +32,7 @@ export function NewsletterSignup({
         body: JSON.stringify({
           email: String(formData.get("email") ?? ""),
           source,
+          ...getAttribution(),
         }),
       });
 

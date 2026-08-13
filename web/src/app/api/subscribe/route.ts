@@ -25,7 +25,8 @@ export async function POST(request: Request) {
     return validationErrorResponse(parsed.error);
   }
 
-  const { email, name, source } = parsed.data;
+  const { email, name, source, pagePath, landingPath, trafficReferrer, searchEngine } =
+    parsed.data;
   const db = getDb();
 
   const [existing] = await db
@@ -38,7 +39,15 @@ export async function POST(request: Request) {
     if (!existing.active) {
       await db
         .update(subscribers)
-        .set({ active: true, name: name ?? existing.name, subscribedAt: new Date() })
+        .set({
+          active: true,
+          name: name ?? existing.name,
+          subscribedAt: new Date(),
+          pagePath: pagePath || existing.pagePath,
+          landingPath: landingPath || existing.landingPath,
+          trafficReferrer: trafficReferrer || existing.trafficReferrer,
+          searchEngine: searchEngine || existing.searchEngine,
+        })
         .where(eq(subscribers.email, email));
     }
 
@@ -51,6 +60,10 @@ export async function POST(request: Request) {
     email,
     name: name ?? null,
     source: source ?? "website",
+    pagePath: pagePath || null,
+    landingPath: landingPath || null,
+    trafficReferrer: trafficReferrer || null,
+    searchEngine: searchEngine || null,
   });
 
   return NextResponse.json({

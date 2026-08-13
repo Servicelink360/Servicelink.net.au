@@ -1,4 +1,5 @@
 import { desc } from "drizzle-orm";
+import { AttributionDetails } from "@/components/AttributionDetails";
 import { getDb } from "@/lib/db";
 import { contactMessages } from "@/lib/db/schema";
 import { deleteMessage } from "@/lib/actions";
@@ -13,8 +14,8 @@ export default async function MessagesPage() {
     <>
       <h1 style={{ marginTop: 0 }}>Contact messages</h1>
       <p style={{ marginTop: 0, color: "#64748b" }}>
-        Enquiries submitted from the website contact form. Name, email, phone,
-        organisation, subject and message are stored here.
+        Enquiries submitted from the website contact and quote forms, including
+        the page they used and whether they came from Google or another source.
       </p>
       <div className="admin-panel">
         <table className="admin-table">
@@ -22,6 +23,7 @@ export default async function MessagesPage() {
             <tr>
               <th>From</th>
               <th>Contact details</th>
+              <th>Came from</th>
               <th>Message</th>
               <th>Received</th>
               <th />
@@ -30,7 +32,7 @@ export default async function MessagesPage() {
           <tbody>
             {rows.length === 0 ? (
               <tr>
-                <td colSpan={5}>No messages yet.</td>
+                <td colSpan={6}>No messages yet.</td>
               </tr>
             ) : (
               rows.map((row) => (
@@ -54,7 +56,15 @@ export default async function MessagesPage() {
                     ) : (
                       <div>Subject: —</div>
                     )}
-                    <div>Source: {row.source}</div>
+                  </td>
+                  <td>
+                    <AttributionDetails
+                      source={row.source}
+                      pagePath={row.pagePath}
+                      landingPath={row.landingPath}
+                      searchEngine={row.searchEngine}
+                      trafficReferrer={row.trafficReferrer}
+                    />
                   </td>
                   <td style={{ maxWidth: "360px", whiteSpace: "pre-wrap" }}>{row.message}</td>
                   <td>{new Date(row.createdAt).toLocaleString("en-AU")}</td>

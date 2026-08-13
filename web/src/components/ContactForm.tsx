@@ -1,6 +1,7 @@
 "use client";
 
 import { FormEvent, useState } from "react";
+import { getAttribution } from "@/lib/attribution";
 
 type FormState = "idle" | "submitting" | "success" | "error";
 
@@ -25,6 +26,7 @@ export function ContactForm() {
           email: String(formData.get("email") ?? ""),
           phone: String(formData.get("phone") ?? ""),
           message: String(formData.get("message") ?? ""),
+          ...getAttribution(),
         }),
       });
 
