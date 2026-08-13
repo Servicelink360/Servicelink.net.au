@@ -33,16 +33,18 @@ function isHubPage(page: SeoPageRecord): boolean {
   return page.pageType === "city_hub" || page.pageType === "metro_hub";
 }
 
+function formatStateDisplay(state: string) {
+  const trimmed = state.trim();
+  if (!trimmed) return trimmed;
+  return trimmed.charAt(0).toUpperCase() + trimmed.slice(1).toLowerCase();
+}
+
 function getHeroBadge(page: SeoPageRecord): { value: string; label: string } {
-  if (page.service) {
-    return { value: page.city.state, label: "Servicing locally" };
-  }
-
+  const state = formatStateDisplay(page.city.state);
   if (page.metro) {
-    return { value: page.city.state, label: "Metro area" };
+    return { value: state, label: page.metro.name };
   }
-
-  return { value: page.city.state, label: "City coverage" };
+  return { value: state, label: page.city.name };
 }
 
 function LocationServiceGrid({
