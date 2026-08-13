@@ -9,7 +9,8 @@ import {
 } from "@/lib/db/schema";
 import { getPublicSiteUrl } from "@/lib/site-url";
 
-type Period = "7d" | "30d" | "all";
+type Period = "7d" | "30d" | "all" | "custom";
+type DateRange = { from: string | null; to: string | null };
 
 type CountRow = { label: string | null; total: number };
 type DayRow = { day: string; views: number; visitors: number };
@@ -38,25 +39,73 @@ const PERIODS: { value: Period; label: string }[] = [
   { value: "7d", label: "Last 7 days" },
   { value: "30d", label: "Last 30 days" },
   { value: "all", label: "All time" },
+  { value: "custom", label: "Custom" },
 ];
+const YMD = /^\d{4}-\d{2}-\d{2}$/;
+
+function todayYmd() {
+  return new Date().toLocaleDateString("en-CA", { timeZone: "Australia/Sydney" });
+}
+
+function addDays(ymd: string, days: number) {
+  const date = new Date(`${ymd}T00:00:00Z`);
+  date.setUTCDate(date.getUTCDate() + days);
+  return date.toISOString().slice(0, 10);
+}
+
+function parseYmd(value?: string) {
+  if (!value || !YMD.test(value)) return null;
+  return value;
+}
 
 function parsePeriod(value?: string): Period {
-  if (value === "7d" || value === "all") return value;
+  if (value === "7d" || value === "all" || value === "custom") return value;
   return "30d";
 }
 
-function periodStart(period: Period) {
-  if (period === "all") return null;
-  const days = period === "7d" ? 7 : 30;
-  return new Date(Date.now() - days * 86_400_000);
+function rangeForPeriod(period: Period, fromParam?: string, toParam?: string): DateRange {
+  const today = todayYmd();
+  if (period === "all") return { from: null, to: null };
+  if (period === "7d") return { from: addDays(today, -6), to: today };
+  if (period === "30d") return { from: addDays(today, -29), to: today };
+
+  let from = parseYmd(fromParam);
+  let to = parseYmd(toParam);
+  if (!from && !to) {
+    from = addDays(today, -29);
+    to = today;
+  } else if (!from) {
+    from = to;
+  } else if (!to) {
+    to = today;
+  }
+  if (from && to && from > to) {
+    [from, to] = [to, from];
+  }
+  return { from, to };
 }
 
-function sqlTime(date: Date) {
-  return date.toISOString();
+function rangeClause(column: unknown, range: DateRange) {
+  if (range.from && range.to) {
+    return sql`${column} >= (CAST(${range.from} AS date) AT TIME ZONE 'Australia/Sydney')
+      AND ${column} < ((CAST(${range.to} AS date) + 1) AT TIME ZONE 'Australia/Sydney')`;
+  }
+  if (range.from) {
+    return sql`${column} >= (CAST(${range.from} AS date) AT TIME ZONE 'Australia/Sydney')`;
+  }
+  if (range.to) {
+    return sql`${column} < ((CAST(${range.to} AS date) + 1) AT TIME ZONE 'Australia/Sydney')`;
+  }
+  return sql`true`;
 }
 
-function sinceClause(column: unknown, start: Date | null) {
-  return start ? sql`${column} >= CAST(${sqlTime(start)} AS timestamptz)` : sql`true`;
+function periodLabel(period: Period, range: DateRange) {
+  if (period === "all") return "all time";
+  if (range.from && range.to && range.from === range.to) return range.from;
+  if (range.from && range.to) return `${range.from} to ${range.to}`;
+  if (period === "7d") return "last 7 days";
+  if (period === "custom") return "custom";
+  return "last 30 days";
 }
 
 function pageHref(path: string) {
@@ -158,18 +207,22 @@ function BarList({ rows, empty }: { rows: CountRow[]; empty: string }) {
 export default async function StatisticsPage({
   searchParams,
 }: {
-  searchParams: Promise<{ period?: string }>;
+  searchParams: Promise<{ period?: string; from?: string; to?: string }>;
 }) {
-  const period = parsePeriod((await searchParams).period);
-  const start = periodStart(period);
+  const params = await searchParams;
+  const period = parsePeriod(params.period);
+  const range = rangeForPeriod(period, params.from, params.to);
+  const chartRange =
+    period === "all" ? { from: addDays(todayYmd(), -59), to: todayYmd() } : range;
+  const formFrom = range.from ?? addDays(todayYmd(), -29);
+  const formTo = range.to ?? todayYmd();
   const db = getDb();
-  const visitSince = sinceClause(siteVisits.createdAt, start);
-  const messageSince = sinceClause(contactMessages.createdAt, start);
-  const userSince = sinceClause(users.createdAt, start);
-  const subSince = sinceClause(subscribers.subscribedAt, start);
-  const todayStart = new Date();
-  todayStart.setHours(0, 0, 0, 0);
-  const dailyStart = start ?? new Date(Date.now() - 60 * 86_400_000);
+  const visitSince = rangeClause(siteVisits.createdAt, range);
+  const messageSince = rangeClause(contactMessages.createdAt, range);
+  const userSince = rangeClause(users.createdAt, range);
+  const subSince = rangeClause(subscribers.subscribedAt, range);
+  const todaySince = sql`${siteVisits.createdAt} >= ((now() AT TIME ZONE 'Australia/Sydney')::date AT TIME ZONE 'Australia/Sydney')`;
+  const label = periodLabel(period, range);
 
   const [
     [visitTotals],
@@ -204,7 +257,7 @@ export default async function StatisticsPage({
         visitors: sql<number>`count(distinct ${siteVisits.sessionId})::int`,
       })
       .from(siteVisits)
-      .where(sql`${siteVisits.createdAt} >= CAST(${sqlTime(todayStart)} AS timestamptz)`),
+      .where(todaySince),
     db
       .select({
         day: sql<string>`to_char(date_trunc('day', ${siteVisits.createdAt} at time zone 'Australia/Sydney'), 'YYYY-MM-DD')`,
@@ -212,7 +265,7 @@ export default async function StatisticsPage({
         visitors: sql<number>`count(distinct ${siteVisits.sessionId})::int`,
       })
       .from(siteVisits)
-      .where(sql`${siteVisits.createdAt} >= CAST(${sqlTime(dailyStart)} AS timestamptz)`)
+      .where(rangeClause(siteVisits.createdAt, chartRange))
       .groupBy(sql`date_trunc('day', ${siteVisits.createdAt} at time zone 'Australia/Sydney')`)
       .orderBy(sql`date_trunc('day', ${siteVisits.createdAt} at time zone 'Australia/Sydney')`),
     db
@@ -381,18 +434,38 @@ export default async function StatisticsPage({
             Page visits, clicked pages, search engines, and where people contact, quote, join, or subscribe.
           </p>
         </div>
-        <div className="admin-actions">
-          {PERIODS.map((entry) => (
-            <Link
-              key={entry.value}
-              className={`admin-btn admin-btn--small ${
-                period === entry.value ? "" : "admin-btn--ghost"
-              }`}
-              href={`/dashboard/statistics?period=${entry.value}`}
-            >
-              {entry.label}
-            </Link>
-          ))}
+        <div className="admin-stat-filters">
+          <div className="admin-actions">
+            {PERIODS.map((entry) => (
+              <Link
+                key={entry.value}
+                className={`admin-btn admin-btn--small ${
+                  period === entry.value ? "" : "admin-btn--ghost"
+                }`}
+                href={
+                  entry.value === "custom"
+                    ? `/dashboard/statistics?period=custom&from=${formFrom}&to=${formTo}`
+                    : `/dashboard/statistics?period=${entry.value}`
+                }
+              >
+                {entry.label}
+              </Link>
+            ))}
+          </div>
+          <form className="admin-stat-custom" action="/dashboard/statistics" method="get">
+            <input type="hidden" name="period" value="custom" />
+            <label>
+              From
+              <input type="date" name="from" defaultValue={formFrom} max={todayYmd()} required />
+            </label>
+            <label>
+              To
+              <input type="date" name="to" defaultValue={formTo} max={todayYmd()} required />
+            </label>
+            <button className="admin-btn admin-btn--small" type="submit">
+              Apply
+            </button>
+          </form>
         </div>
       </div>
 
@@ -407,11 +480,11 @@ export default async function StatisticsPage({
         </div>
         <div className="admin-card">
           <strong>{visitTotals?.visitors ?? 0}</strong>
-          <span>Visitors ({period === "all" ? "all time" : period})</span>
+          <span>Visitors ({label})</span>
         </div>
         <div className="admin-card">
           <strong>{visitTotals?.views ?? 0}</strong>
-          <span>Page views ({period === "all" ? "all time" : period})</span>
+          <span>Page views ({label})</span>
         </div>
         <div className="admin-card">
           <strong>{leadTotals?.contacts ?? 0}</strong>
