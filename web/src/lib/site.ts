@@ -40,13 +40,13 @@ export const navigation = [
   { href: "/contact", label: "Contact" },
 ] as const;
 
-/** State hubs in the Locations nav dropdown (capital city SEO pages). */
+/** Fallback state links in the Locations nav if city data is unavailable. */
 export const locationStateLinks = [
-  { href: "/locations/sydney", label: "NSW" },
-  { href: "/locations/melbourne", label: "VIC" },
-  { href: "/locations/brisbane", label: "QLD" },
-  { href: "/locations/perth", label: "WA" },
-  { href: "/locations/adelaide", label: "South Australia" },
+  { href: "/locations?state=NSW", label: "NSW" },
+  { href: "/locations?state=VIC", label: "VIC" },
+  { href: "/locations?state=QLD", label: "QLD" },
+  { href: "/locations?state=WA", label: "WA" },
+  { href: "/locations?state=SA", label: "South Australia" },
 ] as const;
 
 export const heroSlides = [
