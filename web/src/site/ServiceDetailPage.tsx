@@ -106,9 +106,9 @@ export default async function ServicePage({ params }: ServicePageProps) {
             </div>
             <div className="m1-service-hero__badge">
               <span className="m1-service-hero__badge-n m1-service-hero__badge-n--name">
-                {service.title}
+                Our services
               </span>
-              <span className="m1-service-hero__badge-l">Our services</span>
+              <span className="m1-service-hero__badge-l">{service.title}</span>
             </div>
           </div>
         </div>
