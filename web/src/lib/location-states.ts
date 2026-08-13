@@ -3,6 +3,7 @@ export type LocationCity = {
   slug: string;
   name: string;
   state: string;
+  sortOrder?: number;
 };
 
 export type StateGroup = {
@@ -51,6 +52,31 @@ export function stateHref(code: string) {
   return `/locations?state=${encodeURIComponent(code)}`;
 }
 
+const STATE_HUB_SLUGS: Record<string, string> = {
+  NSW: "sydney",
+  VIC: "melbourne",
+  QLD: "brisbane",
+  WA: "perth",
+  SA: "adelaide",
+  TAS: "hobart",
+  NT: "darwin",
+  ACT: "canberra",
+};
+
+function sortCitiesInState(code: string, cities: LocationCity[]) {
+  const hub = STATE_HUB_SLUGS[code];
+  return cities.slice().sort((a, b) => {
+    if (hub) {
+      if (a.slug === hub && b.slug !== hub) return -1;
+      if (b.slug === hub && a.slug !== hub) return 1;
+    }
+    const orderA = a.sortOrder ?? 9999;
+    const orderB = b.sortOrder ?? 9999;
+    if (orderA !== orderB) return orderA - orderB;
+    return a.name.localeCompare(b.name);
+  });
+}
+
 export function groupCitiesByState(cities: LocationCity[]): StateGroup[] {
   const groups = new Map<string, LocationCity[]>();
   for (const city of cities) {
@@ -70,6 +96,6 @@ export function groupCitiesByState(cities: LocationCity[]): StateGroup[] {
     code,
     label: stateLabel(code),
     href: stateHref(code),
-    cities: (groups.get(code) ?? []).slice().sort((a, b) => a.name.localeCompare(b.name)),
+    cities: sortCitiesInState(code, groups.get(code) ?? []),
   }));
 }
