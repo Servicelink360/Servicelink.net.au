@@ -157,6 +157,12 @@ export const sitePages = pgTable("site_pages", {
   createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
 });
 
+export const statsExcludeIps = pgTable("stats_exclude_ips", {
+  ip: varchar("ip", { length: 64 }).primaryKey(),
+  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+  updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow().notNull(),
+});
+
 export const siteVisits = pgTable("site_visits", {
   id: uuid("id").defaultRandom().primaryKey(),
   sessionId: varchar("session_id", { length: 64 }).notNull(),

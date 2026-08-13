@@ -1,7 +1,9 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
+import { ExcludeFromStats } from "@/components/ExcludeFromStats";
 import { requireAdminPage } from "@/lib/guard";
 import { clearAdminSession } from "@/lib/auth";
+import { rememberAdminComputer } from "@/lib/stats-exclude";
 
 const NAV = [
   { href: "/dashboard", label: "Overview" },
@@ -26,9 +28,11 @@ export default async function AdminLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   const session = await requireAdminPage();
+  await rememberAdminComputer();
 
   return (
     <div className="admin-shell">
+      <ExcludeFromStats />
       <aside className="admin-sidebar">
         <div className="admin-brand">
           <strong>Servicelink</strong>

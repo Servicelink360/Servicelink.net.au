@@ -7,6 +7,11 @@ import {
   validationErrorResponse,
 } from "@/lib/api";
 import { visitSchema } from "@/lib/validations";
+import {
+  clientIpFromRequest,
+  hasStatsExcludeCookie,
+  isExcludedStatsIp,
+} from "@/lib/stats-exclude";
 
 const BOT_UA =
   /bot|crawl|spider|slurp|facebookexternalhit|whatsapp|preview|lighthouse|headless|httpclient|monitor/i;
@@ -18,6 +23,15 @@ function isInternalPath(path: string) {
 export async function POST(request: Request) {
   const dbCheck = requireDatabase();
   if (dbCheck) return dbCheck;
+
+  if (hasStatsExcludeCookie(request)) {
+    return NextResponse.json({ ok: true });
+  }
+
+  const ip = clientIpFromRequest(request);
+  if (await isExcludedStatsIp(ip)) {
+    return NextResponse.json({ ok: true });
+  }
 
   const userAgent = request.headers.get("user-agent") ?? "";
   if (!userAgent || BOT_UA.test(userAgent)) {

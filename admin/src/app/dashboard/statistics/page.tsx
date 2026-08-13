@@ -474,6 +474,7 @@ export default async function StatisticsPage({
           <h1 style={{ margin: 0 }}>Statistics</h1>
           <p style={{ margin: "0.35rem 0 0", color: "#64748b", fontSize: "0.875rem" }}>
             Page visits, clicked pages, search engines, and where people contact, quote, join, or subscribe.
+            Your computer is excluded while you are signed in to admin.
           </p>
         </div>
         <div className="admin-stat-filters">

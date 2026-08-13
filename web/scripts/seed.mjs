@@ -107,6 +107,14 @@ await sql`CREATE INDEX IF NOT EXISTS site_visits_session_id_idx ON site_visits (
 await sql`CREATE INDEX IF NOT EXISTS site_visits_path_idx ON site_visits (path)`;
 
 await sql`
+  CREATE TABLE IF NOT EXISTS stats_exclude_ips (
+    ip varchar(64) PRIMARY KEY,
+    created_at timestamptz NOT NULL DEFAULT now(),
+    updated_at timestamptz NOT NULL DEFAULT now()
+  )
+`;
+
+await sql`
   INSERT INTO news_posts (
     title, slug, summary, body, meta_title, meta_description,
     featured_image, published, published_at

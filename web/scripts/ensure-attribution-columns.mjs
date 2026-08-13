@@ -48,5 +48,13 @@ await sql`CREATE INDEX IF NOT EXISTS site_visits_created_at_idx ON site_visits (
 await sql`CREATE INDEX IF NOT EXISTS site_visits_session_id_idx ON site_visits (session_id)`;
 await sql`CREATE INDEX IF NOT EXISTS site_visits_path_idx ON site_visits (path)`;
 
+await sql`
+  CREATE TABLE IF NOT EXISTS stats_exclude_ips (
+    ip varchar(64) PRIMARY KEY,
+    created_at timestamptz NOT NULL DEFAULT now(),
+    updated_at timestamptz NOT NULL DEFAULT now()
+  )
+`;
+
 await sql.end();
 console.log("ATTRIBUTION_COLUMNS_OK");

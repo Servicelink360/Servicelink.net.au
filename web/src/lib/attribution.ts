@@ -1,3 +1,5 @@
+import { shouldSkipStatsClient } from "@/lib/stats-exclude";
+
 export type AttributionPayload = {
   pagePath: string;
   landingPath: string;
@@ -171,6 +173,7 @@ export function getVisitSessionId() {
 
 export function trackPageView() {
   if (typeof window === "undefined") return;
+  if (shouldSkipStatsClient()) return;
   captureAttribution();
   const attribution = getAttribution();
   const sessionId = getVisitSessionId();
