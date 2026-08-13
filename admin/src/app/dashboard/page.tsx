@@ -28,7 +28,7 @@ export default async function DashboardPage() {
           visitors: sql<number>`count(distinct ${siteVisits.sessionId})::int`,
         })
         .from(siteVisits)
-        .where(sql`${siteVisits.createdAt} >= ${todayStart}`),
+        .where(sql`${siteVisits.createdAt} >= CAST(${todayStart.toISOString()} AS timestamptz)`),
     ]);
 
   return (

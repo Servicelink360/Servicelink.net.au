@@ -51,8 +51,12 @@ function periodStart(period: Period) {
   return new Date(Date.now() - days * 86_400_000);
 }
 
+function sqlTime(date: Date) {
+  return date.toISOString();
+}
+
 function sinceClause(column: unknown, start: Date | null) {
-  return start ? sql`${column} >= ${start}` : sql`true`;
+  return start ? sql`${column} >= CAST(${sqlTime(start)} AS timestamptz)` : sql`true`;
 }
 
 function pageHref(path: string) {
@@ -200,7 +204,7 @@ export default async function StatisticsPage({
         visitors: sql<number>`count(distinct ${siteVisits.sessionId})::int`,
       })
       .from(siteVisits)
-      .where(sql`${siteVisits.createdAt} >= ${todayStart}`),
+      .where(sql`${siteVisits.createdAt} >= CAST(${sqlTime(todayStart)} AS timestamptz)`),
     db
       .select({
         day: sql<string>`to_char(date_trunc('day', ${siteVisits.createdAt} at time zone 'Australia/Sydney'), 'YYYY-MM-DD')`,
@@ -208,7 +212,7 @@ export default async function StatisticsPage({
         visitors: sql<number>`count(distinct ${siteVisits.sessionId})::int`,
       })
       .from(siteVisits)
-      .where(sql`${siteVisits.createdAt} >= ${dailyStart}`)
+      .where(sql`${siteVisits.createdAt} >= CAST(${sqlTime(dailyStart)} AS timestamptz)`)
       .groupBy(sql`date_trunc('day', ${siteVisits.createdAt} at time zone 'Australia/Sydney')`)
       .orderBy(sql`date_trunc('day', ${siteVisits.createdAt} at time zone 'Australia/Sydney')`),
     db
