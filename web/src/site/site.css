@@ -1080,6 +1080,13 @@ html:has(.m1) {
   letter-spacing: -0.03em;
 }
 
+.m1-service-hero__badge-n--name {
+  font-size: 1.125rem;
+  line-height: 1.15;
+  max-width: 12rem;
+  letter-spacing: -0.02em;
+}
+
 .m1-service-hero__badge-l {
   font-size: 0.6875rem;
   font-weight: 600;

@@ -105,10 +105,10 @@ export default async function ServicePage({ params }: ServicePageProps) {
               />
             </div>
             <div className="m1-service-hero__badge">
-              <span className="m1-service-hero__badge-n">
-                {String(service.highlights.length).padStart(2, "0")}
+              <span className="m1-service-hero__badge-n m1-service-hero__badge-n--name">
+                {service.title}
               </span>
-              <span className="m1-service-hero__badge-l">Core capabilities</span>
+              <span className="m1-service-hero__badge-l">Our services</span>
             </div>
           </div>
         </div>
