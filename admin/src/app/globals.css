@@ -236,6 +236,159 @@ a.admin-card:hover {
   font: inherit;
 }
 
+.admin-chart {
+  position: relative;
+}
+
+.admin-chart-svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.admin-chart-svg--donut {
+  max-width: 220px;
+  margin: 0 auto;
+}
+
+.admin-chart--donut {
+  display: grid;
+  gap: 1rem;
+  justify-items: center;
+}
+
+.admin-chart-grid {
+  stroke: #e2e8f0;
+  stroke-width: 1;
+}
+
+.admin-chart-axis {
+  fill: #94a3b8;
+  font-size: 11px;
+}
+
+.admin-chart-line {
+  fill: none;
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.admin-chart-line--views {
+  stroke: #2563eb;
+}
+
+.admin-chart-line--visitors {
+  stroke: #0f172a;
+}
+
+.admin-chart-line--enquiries {
+  stroke: #f59e0b;
+}
+
+.admin-chart-hover-line {
+  stroke: #cbd5e1;
+  stroke-dasharray: 4 4;
+}
+
+.admin-chart-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem 1rem;
+  margin-top: 0.75rem;
+  color: #475569;
+  font-size: 0.8125rem;
+}
+
+.admin-chart-legend i {
+  display: inline-block;
+  width: 0.625rem;
+  height: 0.625rem;
+  border-radius: 99px;
+  margin-right: 0.4rem;
+}
+
+.admin-chart-legend--stack {
+  display: grid;
+  width: 100%;
+  gap: 0.45rem;
+}
+
+.admin-chart-legend--stack span {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.admin-chart-legend em {
+  font-style: normal;
+  font-variant-numeric: tabular-nums;
+  color: #0f172a;
+}
+
+.admin-chart-donut-total {
+  fill: #0f172a;
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.admin-chart-donut-label {
+  fill: #64748b;
+  font-size: 11px;
+}
+
+.admin-chart-tooltip,
+.admin-chart-hint {
+  margin: 0.75rem 0 0;
+  color: #64748b;
+  font-size: 0.8125rem;
+}
+
+.admin-chart-tooltip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  color: #334155;
+}
+
+.admin-chart-bars {
+  display: grid;
+  gap: 0.7rem;
+}
+
+.admin-chart-bar {
+  display: grid;
+  grid-template-columns: minmax(0, 1.3fr) minmax(90px, 1fr) auto;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.admin-chart-bar__label {
+  font-size: 0.8125rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.admin-chart-bar__track {
+  height: 10px;
+  background: #e2e8f0;
+  border-radius: 99px;
+  overflow: hidden;
+}
+
+.admin-chart-bar__fill {
+  height: 100%;
+  border-radius: 99px;
+}
+
+.admin-chart-bar__value {
+  font-size: 0.8125rem;
+  font-variant-numeric: tabular-nums;
+  color: #334155;
+}
+
 .admin-panel {
   background: #fff;
   border: 1px solid #e2e8f0;

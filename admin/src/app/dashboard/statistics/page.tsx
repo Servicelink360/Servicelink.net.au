@@ -7,13 +7,18 @@ import {
   subscribers,
   users,
 } from "@/lib/db/schema";
+import {
+  AreaChart,
+  BarChart,
+  DonutChart,
+} from "@/components/StatisticsCharts";
 import { getPublicSiteUrl } from "@/lib/site-url";
 
 type Period = "7d" | "30d" | "all" | "custom";
 type DateRange = { from: string | null; to: string | null };
 
 type CountRow = { label: string | null; total: number };
-type DayRow = { day: string; views: number; visitors: number };
+type DayRow = { day: string; views: number; visitors: number; enquiries?: number };
 type PageVisitRow = {
   path: string | null;
   views: number;
@@ -168,40 +173,42 @@ function enginesForPage(rows: PageEngineRow[], path: string) {
     .slice(0, 6);
 }
 
-function BarList({ rows, empty }: { rows: CountRow[]; empty: string }) {
-  const max = Math.max(...rows.map((row) => row.total), 1);
-  if (rows.length === 0) {
-    return <p className="admin-stat-empty">{empty}</p>;
+function fillDays(
+  rows: DayRow[],
+  extras: { day: string; total: number }[],
+  from: string | null,
+  to: string | null,
+) {
+  const views = new Map(rows.map((row) => [row.day, row]));
+  const extra = new Map<string, number>();
+  for (const row of extras) {
+    extra.set(row.day, (extra.get(row.day) ?? 0) + Number(row.total || 0));
   }
+  if (!from || !to) {
+    return [...new Set([...views.keys(), ...extra.keys()])].sort().map((day) => ({
+      day,
+      views: Number(views.get(day)?.views || 0),
+      visitors: Number(views.get(day)?.visitors || 0),
+      enquiries: extra.get(day) ?? 0,
+    }));
+  }
+  const filled = [];
+  for (let day = from; day <= to; day = addDays(day, 1)) {
+    filled.push({
+      day,
+      views: Number(views.get(day)?.views || 0),
+      visitors: Number(views.get(day)?.visitors || 0),
+      enquiries: extra.get(day) ?? 0,
+    });
+  }
+  return filled;
+}
 
-  return (
-    <div className="admin-stat-bars">
-      {rows.map((row) => {
-        const label = row.label?.trim() || "Unknown";
-        const href = label.startsWith("/") ? pageHref(label) : null;
-        return (
-          <div key={label} className="admin-stat-bar">
-            <div className="admin-stat-bar__label">
-              {href ? (
-                <a href={href} target="_blank" rel="noopener noreferrer">
-                  {label}
-                </a>
-              ) : (
-                label
-              )}
-            </div>
-            <div className="admin-stat-bar__track">
-              <div
-                className="admin-stat-bar__fill"
-                style={{ width: `${Math.max(6, (row.total / max) * 100)}%` }}
-              />
-            </div>
-            <div className="admin-stat-bar__value">{row.total}</div>
-          </div>
-        );
-      })}
-    </div>
-  );
+function chartCounts(rows: CountRow[]) {
+  return rows.map((row) => ({
+    label: row.label?.trim() || "Unknown",
+    total: Number(row.total || 0),
+  }));
 }
 
 export default async function StatisticsPage({
@@ -243,6 +250,9 @@ export default async function StatisticsPage({
     pageEngines,
     landingPages,
     recentVisits,
+    dailyMessages,
+    dailyJoins,
+    dailySubs,
   ] = await Promise.all([
     db
       .select({
@@ -406,10 +416,42 @@ export default async function StatisticsPage({
       .where(visitSince)
       .orderBy(sql`${siteVisits.createdAt} desc`)
       .limit(40),
+    db
+      .select({
+        day: sql<string>`to_char(date_trunc('day', ${contactMessages.createdAt} at time zone 'Australia/Sydney'), 'YYYY-MM-DD')`,
+        total: sql<number>`count(*)::int`,
+      })
+      .from(contactMessages)
+      .where(messageSince)
+      .groupBy(sql`date_trunc('day', ${contactMessages.createdAt} at time zone 'Australia/Sydney')`),
+    db
+      .select({
+        day: sql<string>`to_char(date_trunc('day', ${users.createdAt} at time zone 'Australia/Sydney'), 'YYYY-MM-DD')`,
+        total: sql<number>`count(*)::int`,
+      })
+      .from(users)
+      .where(userSince)
+      .groupBy(sql`date_trunc('day', ${users.createdAt} at time zone 'Australia/Sydney')`),
+    db
+      .select({
+        day: sql<string>`to_char(date_trunc('day', ${subscribers.subscribedAt} at time zone 'Australia/Sydney'), 'YYYY-MM-DD')`,
+        total: sql<number>`count(*)::int`,
+      })
+      .from(subscribers)
+      .where(subSince)
+      .groupBy(sql`date_trunc('day', ${subscribers.subscribedAt} at time zone 'Australia/Sydney')`),
   ]);
 
-  const dayRows = daily as DayRow[];
-  const maxDayViews = Math.max(...dayRows.map((row) => row.views), 1);
+  const dayRows = fillDays(
+    daily as DayRow[],
+    [
+      ...(dailyMessages as { day: string; total: number }[]),
+      ...(dailyJoins as { day: string; total: number }[]),
+      ...(dailySubs as { day: string; total: number }[]),
+    ],
+    chartRange.from,
+    chartRange.to,
+  );
   const leadEngines = mergeCounts(
     messageEngines as CountRow[],
     joinEngines as CountRow[],
@@ -505,25 +547,14 @@ export default async function StatisticsPage({
       </div>
 
       <div className="admin-panel" style={{ padding: "1.25rem", marginBottom: "1.25rem" }}>
-        <h2 style={{ marginTop: 0 }}>Daily visitors</h2>
-        {dayRows.length === 0 ? (
-          <p className="admin-stat-empty">
-            No visitor data yet. Numbers start from when tracking went live.
-          </p>
-        ) : (
-          <div className="admin-stat-days">
-            {dayRows.map((row) => (
-              <div key={row.day} className="admin-stat-day" title={`${row.day}: ${row.visitors} visitors, ${row.views} views`}>
-                <div
-                  className="admin-stat-day__bar"
-                  style={{ height: `${Math.max(8, (row.views / maxDayViews) * 120)}px` }}
-                />
-                <span>{row.day.slice(5)}</span>
-                <small>{row.visitors}</small>
-              </div>
-            ))}
-          </div>
-        )}
+        <h2 style={{ marginTop: 0 }}>Daily activity</h2>
+        <p className="admin-stat-empty" style={{ marginBottom: "1rem" }}>
+          Page views, unique visitors, and enquiries over time.
+        </p>
+        <AreaChart
+          data={dayRows}
+          empty="No visitor data yet. Numbers start from when tracking went live."
+        />
       </div>
 
       <div
@@ -536,24 +567,33 @@ export default async function StatisticsPage({
       >
         <section className="admin-panel" style={{ padding: "1.25rem" }}>
           <h2 style={{ marginTop: 0 }}>Traffic source</h2>
-          <BarList rows={engines as CountRow[]} empty="No traffic sources yet." />
-        </section>
-        <section className="admin-panel" style={{ padding: "1.25rem" }}>
-          <h2 style={{ marginTop: 0 }}>Top pages</h2>
-          <BarList rows={topPages as CountRow[]} empty="No page views yet." />
+          <DonutChart rows={chartCounts(engines as CountRow[])} empty="No traffic sources yet." />
         </section>
         <section className="admin-panel" style={{ padding: "1.25rem" }}>
           <h2 style={{ marginTop: 0 }}>Enquiries by search engine</h2>
-          <BarList
+          <DonutChart
             rows={leadEngines}
             empty="No tracked enquiries yet. Older messages have no source."
           />
         </section>
         <section className="admin-panel" style={{ padding: "1.25rem" }}>
+          <h2 style={{ marginTop: 0 }}>Top pages</h2>
+          <BarChart rows={chartCounts(topPages as CountRow[])} empty="No page views yet." />
+        </section>
+        <section className="admin-panel" style={{ padding: "1.25rem" }}>
           <h2 style={{ marginTop: 0 }}>Enquiries by page</h2>
-          <BarList
-            rows={leadPages}
-            empty="No tracked enquiry pages yet."
+          <BarChart rows={leadPages} empty="No tracked enquiry pages yet." />
+        </section>
+        <section className="admin-panel" style={{ padding: "1.25rem" }}>
+          <h2 style={{ marginTop: 0 }}>Enquiry mix</h2>
+          <DonutChart
+            rows={[
+              { label: "Contacts", total: Number(leadTotals?.contacts || 0) },
+              { label: "Quotes", total: Number(leadTotals?.quotes || 0) },
+              { label: "Joined", total: Number(joinTotals?.joins || 0) },
+              { label: "Subscribers", total: Number(subscriberTotals?.subscribers || 0) },
+            ].filter((row) => row.total > 0)}
+            empty="No enquiries in this range."
           />
         </section>
       </div>
