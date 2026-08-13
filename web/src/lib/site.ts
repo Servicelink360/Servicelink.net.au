@@ -46,7 +46,7 @@ export const locationStateLinks = [
   { href: "/locations?state=VIC", label: "VIC" },
   { href: "/locations?state=QLD", label: "QLD" },
   { href: "/locations?state=WA", label: "WA" },
-  { href: "/locations?state=SA", label: "South Australia" },
+  { href: "/locations?state=SA", label: "SA" },
 ] as const;
 
 export const heroSlides = [

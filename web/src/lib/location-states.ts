@@ -19,7 +19,7 @@ const STATE_LABELS: Record<string, string> = {
   VIC: "VIC",
   QLD: "QLD",
   WA: "WA",
-  SA: "South Australia",
+  SA: "SA",
   TAS: "TAS",
   NT: "NT",
   ACT: "ACT",
